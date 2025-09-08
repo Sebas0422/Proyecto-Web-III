@@ -24,12 +24,8 @@ jobs:
         working-directory: ./backend
       - run: npm run build
         working-directory: ./backend
-      - name: Deploy Backend to Railway
-        if: github.ref == 'refs/heads/main'
-      - run: npm install -g @railway/cli
-      - run: railway up --environment production
-        env:
-        RAILWAY_TOKEN: ${{ secrets.RAILWAY_TOKEN }}
+      - run: npm test
+        working-directory: ./backend
 
   frontend:
     runs-on: ubuntu-latest
