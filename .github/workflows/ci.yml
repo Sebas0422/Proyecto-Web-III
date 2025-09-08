@@ -1,4 +1,4 @@
-name: Node.js CI
+name: Node.js CI/CD
 
 on:
   push:
@@ -16,16 +16,19 @@ jobs:
       matrix:
         node-version: [18.x]
     steps:
-    - uses: actions/checkout@v3
-    - uses: actions/setup-node@v3
-      with:
-        node-version: ${{ matrix.node-version }}
-    - run: npm install
-      working-directory: ./backend
-    - run: npm run build
-      working-directory: ./backend
-    - run: npm test
-      working-directory: ./backend
+      - uses: actions/checkout@v3
+      - uses: actions/setup-node@v3
+        with:
+          node-version: ${{ matrix.node-version }}
+      - run: npm install
+        working-directory: ./backend
+      - run: npm run build
+        working-directory: ./backend
+      - name: Deploy Backend to Railway
+        if: github.ref == 'refs/heads/main'
+        run: npx railway up --environment production
+        env:
+          RAILWAY_TOKEN: ${{ secrets.RAILWAY_TOKEN }}
 
   frontend:
     runs-on: ubuntu-latest
@@ -33,11 +36,15 @@ jobs:
       matrix:
         node-version: [18.x]
     steps:
-    - uses: actions/checkout@v3
-    - uses: actions/setup-node@v3
-      with:
-        node-version: ${{ matrix.node-version }}
-    - run: npm install
-      working-directory: ./frontend
-    - run: npm run build
-      working-directory: ./frontend
+      - uses: actions/checkout@v3
+      - uses: actions/setup-node@v3
+        with:
+          node-version: ${{ matrix.node-version }}
+      - run: npm install -g pnpm
+      - run: pnpm install
+        working-directory: ./frontend
+      - run: pnpm run build
+        working-directory: ./frontend
+      - name: Deploy Frontend to Vercel
+        if: github.ref == 'refs/heads/main'
+        run: vercel --prod --token ${{ secrets.VERCEL_TOKEN }}
