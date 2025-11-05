@@ -1,8 +1,13 @@
 import './App.css'
-import MapaUrbanizacion from './components/MapaUrbanizacion'
+import Providers from './app/providers/Providers'
+import AppRoutes from './app/routes/AppRoutes'
 
 function App() {
-  return <MapaUrbanizacion />;
+  return (
+    <Providers>
+      <AppRoutes />
+    </Providers>
+  );
 }
 
 export default App;
