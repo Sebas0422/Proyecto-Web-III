@@ -1,18 +1,19 @@
-import { configureStore } from '@reduxjs/toolkit';
-import { setupListeners } from '@reduxjs/toolkit/query';
-import { baseApi } from '../api/baseApi';
+import { configureStore } from '@reduxjs/toolkit'
+import { authApi } from '../../features/auth/services/authApi'
+import authReducer from '../../features/auth/model/authSlice'
+import { setupListeners } from '@reduxjs/toolkit/query'
 
 export const store = configureStore({
   reducer: {
-    [baseApi.reducerPath]: baseApi.reducer,
-    // add global slices here
+    auth: authReducer,
+    [authApi.reducerPath]: authApi.reducer,
   },
   middleware: (getDefaultMiddleware) =>
-    getDefaultMiddleware().concat(baseApi.middleware),
-  devTools: process.env.NODE_ENV !== 'production',
-});
+    getDefaultMiddleware().concat(authApi.middleware),
+  devTools: true,
+})
 
-setupListeners(store.dispatch);
+setupListeners(store.dispatch)
 
-export type RootState = ReturnType<typeof store.getState>;
-export type AppDispatch = typeof store.dispatch;
+export type RootState = ReturnType<typeof store.getState>
+export type AppDispatch = typeof store.dispatch
