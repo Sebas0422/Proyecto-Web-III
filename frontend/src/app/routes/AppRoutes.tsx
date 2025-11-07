@@ -34,7 +34,6 @@ const AppRoutes: React.FC = () => {
         }
       />
 
-      {/* Example of role protected route */}
       <Route
         path="/admin"
         element={

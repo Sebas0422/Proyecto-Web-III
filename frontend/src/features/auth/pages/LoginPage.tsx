@@ -51,7 +51,6 @@ const LoginPage: React.FC = () => {
   return (
     <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-gray-50 to-gray-100 p-4">
       <div className="w-full max-w-md">
-        {/* Header */}
         <div className="text-center mb-8">
           <div className="inline-flex items-center justify-center w-16 h-16 bg-blue-600 rounded-2xl mb-4 shadow-lg">
             <svg className="w-9 h-9 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -67,7 +66,6 @@ const LoginPage: React.FC = () => {
           <p className="text-gray-600">Ingresa tus credenciales para acceder</p>
         </div>
 
-        {/* Card */}
         <div className="bg-white rounded-2xl shadow-xl p-8 border border-gray-100">
           <Formik initialValues={{ email: '', password: '' }} validationSchema={LoginSchema} onSubmit={handleSubmit}>
             {({ isSubmitting }) => (
@@ -138,7 +136,6 @@ const LoginPage: React.FC = () => {
           </p>
         </div>
 
-        {/* Footer */}
         <p className="text-center text-sm text-gray-500 mt-6">
           © 2025 EstateHub. Todos los derechos reservados.
         </p>

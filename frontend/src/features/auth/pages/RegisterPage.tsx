@@ -55,7 +55,6 @@ const RegisterPage: React.FC = () => {
   return (
     <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-gray-50 to-gray-100 p-4">
       <div className="w-full max-w-md">
-        {/* Header */}
         <div className="text-center mb-8">
           <div className="inline-flex items-center justify-center w-16 h-16 bg-amber-600 rounded-2xl mb-4 shadow-lg">
             <svg className="w-9 h-9 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -71,7 +70,6 @@ const RegisterPage: React.FC = () => {
           <p className="text-gray-600">Completa tus datos para comenzar</p>
         </div>
 
-        {/* Card */}
         <div className="bg-white rounded-2xl shadow-xl p-8 border border-gray-100">
           <Formik
             initialValues={{ name: '', email: '', password: '' }}
@@ -161,7 +159,6 @@ const RegisterPage: React.FC = () => {
           </p>
         </div>
 
-        {/* Footer */}
         <p className="text-center text-sm text-gray-500 mt-6">
           © 2025 EstateHub. Todos los derechos reservados.
         </p>
