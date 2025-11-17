@@ -1,6 +1,5 @@
 import { createApi, fetchBaseQuery } from '@reduxjs/toolkit/query/react'
 import { VITE_API_BASE } from '@app/config/env'
-
 export interface LoginPayload {
   email: string
   password: string
