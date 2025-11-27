@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<kml xmlns="http://www.opengis.net/kml/2.2">
+  <Document>
+    <name>Polygon with Hole</name>
+    <Placemark>
+      <name>Lote con Hueco</name>
+      <Polygon>
+        <!-- Outer boundary -->
+        <outerBoundaryIs>
+          <LinearRing>
+            <coordinates>
+              -63.18350,-17.78350,0
+              -63.18250,-17.78350,0
+              -63.18250,-17.78250,0
+              -63.18350,-17.78250,0
+              -63.18350,-17.78350,0
+            </coordinates>
+          </LinearRing>
+        </outerBoundaryIs>
+
+        <!-- Inner hole -->
+        <innerBoundaryIs>
+          <LinearRing>
+            <coordinates>
+              -63.18320,-17.78320,0
+              -63.18280,-17.78320,0
+              -63.18280,-17.78280,0
+              -63.18320,-17.78280,0
+              -63.18320,-17.78320,0
+            </coordinates>
+          </LinearRing>
+        </innerBoundaryIs>
+
+      </Polygon>
+    </Placemark>
+  </Document>
+</kml>
