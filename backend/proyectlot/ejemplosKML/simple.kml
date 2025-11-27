@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<kml xmlns="http://www.opengis.net/kml/2.2">
+  <Document>
+    <name>Simple Polygon</name>
+    <Placemark>
+      <name>Lote Simple</name>
+      <Polygon>
+        <outerBoundaryIs>
+          <LinearRing>
+            <coordinates>
+              -63.18210,-17.78330,0
+              -63.18150,-17.78330,0
+              -63.18150,-17.78280,0
+              -63.18210,-17.78280,0
+              -63.18210,-17.78330,0
+            </coordinates>
+          </LinearRing>
+        </outerBoundaryIs>
+      </Polygon>
+    </Placemark>
+  </Document>
+</kml>

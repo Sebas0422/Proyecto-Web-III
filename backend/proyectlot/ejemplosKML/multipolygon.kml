@@ -1,0 +1,112 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<kml xmlns="http://www.opengis.net/kml/2.2">
+  <Document>
+    <name>Proyecto SCZ - Sector La Cima (Complejo)</name>
+    <description>Representación unificada de lotes y vías de acceso en un único Objeto Geográfico (Placemark).</description>
+
+    <Style id="LoteStyle">
+      <LineStyle>
+        <color>ff1400A0</color> <width>2.5</width>
+      </LineStyle>
+      <PolyStyle>
+        <color>4c505050</color> <fill>1</fill>
+        <outline>1</outline>
+      </PolyStyle>
+    </Style>
+
+    <Style id="ViaStyle">
+      <LineStyle>
+        <color>ff00ffff</color> <width>4</width>
+      </LineStyle>
+    </Style>
+
+    <Placemark>
+      <name>Proyecto Central - FASE 1</name>
+      <description>Incluye Lotes A-1, A-2 y la Vía Principal 1. Todos gestionados como una sola entidad.</description>
+      
+      <styleUrl>#LoteStyle</styleUrl> 
+      
+      <MultiGeometry>
+
+        <Polygon>
+          <name>Lote A-1</name>
+          <description>Lote en esquina, 350 m².</description>
+          <outerBoundaryIs>
+            <LinearRing>
+              <coordinates>
+                -63.18100,-17.78100,0
+                -63.18050,-17.78100,0
+                -63.18050,-17.78140,0
+                -63.18100,-17.78140,0
+                -63.18100,-17.78100,0
+              </coordinates>
+            </LinearRing>
+          </outerBoundaryIs>
+        </Polygon>
+
+        <Polygon>
+          <name>Lote A-2 (Servidumbre)</name>
+          <description>Lote grande con servidumbre de paso interna.</description>
+          <outerBoundaryIs>
+            <LinearRing>
+              <coordinates>
+                -63.18200,-17.78200,0
+                -63.18150,-17.78200,0
+                -63.18150,-17.78250,0
+                -63.18200,-17.78250,0
+                -63.18200,-17.78200,0
+              </coordinates>
+            </LinearRing>
+          </outerBoundaryIs>
+          <innerBoundaryIs>
+            <LinearRing>
+              <coordinates>
+                -63.18175,-17.78210,0
+                -63.18165,-17.78210,0
+                -63.18165,-17.78220,0
+                -63.18175,-17.78220,0
+                -63.18175,-17.78210,0
+              </coordinates>
+            </LinearRing>
+          </innerBoundaryIs>
+        </Polygon>
+
+        <LineString>
+          <name>Vía Principal</name>
+          <description>Acceso que conecta ambos lotes.</description>
+          <styleUrl>#ViaStyle</styleUrl>
+          <coordinates>
+            -63.18050,-17.78120,0
+            -63.18100,-17.78170,0
+            -63.18150,-17.78200,0
+          </coordinates>
+        </LineString>
+        
+        <Point>
+            <name>Punto de Control Norte</name>
+            <coordinates>-63.18100,-17.78080,0</coordinates>
+        </Point>
+
+      </MultiGeometry>
+    </Placemark>
+
+    <Placemark>
+        <name>Lote Independiente 3-B</name>
+        <styleUrl>#LoteStyle</styleUrl>
+        <Polygon>
+            <outerBoundaryIs>
+                <LinearRing>
+                    <coordinates>
+                        -63.17800,-17.78300,0
+                        -63.17750,-17.78300,0
+                        -63.17750,-17.78350,0
+                        -63.17800,-17.78350,0
+                        -63.17800,-17.78300,0
+                    </coordinates>
+                </LinearRing>
+            </outerBoundaryIs>
+        </Polygon>
+    </Placemark>
+
+  </Document>
+</kml>
