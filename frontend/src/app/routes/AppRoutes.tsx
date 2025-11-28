@@ -6,7 +6,8 @@ import PrivateRoute from '@shared/components/PrivateRoute'
 import RoleGuard from '@shared/components/RoleGuard'
 import { useAppSelector } from '../store/hooks'
 import type { RootState } from '../store/store'
-import LotMap from '@features/lots/LotMap'
+import ListProyecto from '@features/auth/pages/ListProyecto'
+import DashboardPage from '@features/auth/pages/company/Dashboard'
 
 const Dashboard: React.FC = () => {
   const user = useAppSelector((s: RootState) => s.auth.user)
@@ -25,29 +26,27 @@ const AppRoutes: React.FC = () => {
       <Route path="/" element={token ? <Navigate to="/dashboard" /> : <Navigate to="/login" />} />
       <Route path="/login" element={<LoginPage />} />
       <Route path="/register" element={<RegisterPage />} />
-      <Route path="/mapas" element={<LotMap />} />
+   
+
       <Route
         path="/dashboard"
         element={
-          <PrivateRoute>
-            <Dashboard />
-          </PrivateRoute>
+          //<PrivateRoute>
+            <DashboardPage />
+          //</PrivateRoute>
         }
       />
 
       <Route
         path="/admin"
         element={
-          <PrivateRoute>
-            <RoleGuard allowedRoles={["admin"]}>
-              <div style={{ padding: 20 }}>
-                <h2>Admin Panel</h2>
-              </div>
-            </RoleGuard>
-          </PrivateRoute>
+          
+            
+           <ListProyecto />
         }
       />
     </Routes>
+
   )
 }
 
