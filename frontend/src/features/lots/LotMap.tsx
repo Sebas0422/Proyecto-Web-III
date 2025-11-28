@@ -7,13 +7,12 @@ import type { FeatureCollection } from "geojson";
 
 const GOOGLE_API_KEY = import.meta.env.VITE_GOOGLE_MAPS_KEY as string;
 
-// Estilos de mapa más limpios y con altura ajustada al viewport (vh)
 const containerStyle = { 
     width: "100%", 
-    height: "88vh", // Aumentado para ocupar más espacio de la vista
-    borderRadius: "0.5rem", // Bordes redondeados para un look moderno
+    height: "88vh",
+    borderRadius: "0.5rem",
 };
-const defaultCenter = { lat: -17.7833, lng: -63.1821 }; // Santa Cruz, Bolivia
+const defaultCenter = { lat: -17.7833, lng: -63.1821 };
 
 export default function LotMapDashboard() {
     const { isLoaded, loadError } = useJsApiLoader({
@@ -28,17 +27,16 @@ export default function LotMapDashboard() {
     const [loadingKml, setLoadingKml] = useState(false);
     const [error, setError] = useState<string | null>(null);
 
-    // Estado para controlar la visibilidad de la barra lateral
     const [sidebarShow, setSidebarShow] = useState(true);
 
     const toggleSidebar = () => setSidebarShow(!sidebarShow);
 
     const onLoad = useCallback((map: google.maps.Map) => {
         mapRef.current = map;
-        // Capa de datos con estilo corporativo
+        
         const dataLayer = new google.maps.Data({ map });
         dataLayer.setStyle({
-            fillColor: "#007BFF", // Azul primario de Bootstrap
+            fillColor: "#007BFF", 
             fillOpacity: 0.25,
             strokeColor: "#0056b3",
             strokeWeight: 2,
@@ -59,11 +57,9 @@ export default function LotMapDashboard() {
             const parser = new DOMParser();
             const xml = parser.parseFromString(text, "text/xml");
 
-            // Limpia el input de archivo para permitir subir el mismo archivo
             e.target.value = '';
 
             try {
-                // Se asume que toGeoJSON.kml maneja Document
                 const geojson = toGeoJSON.kml(xml as unknown as Document) as FeatureCollection;
                 addGeoJsonDirect(geojson);
             } catch {
@@ -79,7 +75,6 @@ export default function LotMapDashboard() {
     const addGeoJsonDirect = (geojson: FeatureCollection) => {
         if (!dataRef.current) return;
 
-        // Limpia la capa de datos anterior
         dataRef.current.forEach((f) => dataRef.current!.remove(f));
 
         try {
@@ -119,7 +114,6 @@ export default function LotMapDashboard() {
                 processGeometry(geom);
             });
 
-            // Ajusta el mapa a las nuevas geometrías
             if (!bounds.isEmpty()) {
                 mapRef.current?.fitBounds(bounds);
             } else {
@@ -144,11 +138,9 @@ export default function LotMapDashboard() {
 
     return (
         <div className="bg-light min-vh-100">
-            {/* HEADER - Navbar oscura y limpia */}
             <Navbar bg="dark" variant="dark" expand={false} className="shadow-lg">
                 <Container fluid>
                     <Button variant="outline-light" onClick={toggleSidebar} className="border-0 p-2 me-3">
-                        {/* Símbolo de menú estándar */}
                         <span className="h5 mb-0">☰</span>
                         <span className="visually-hidden">Alternar Menú</span>
                     </Button>
@@ -159,157 +151,152 @@ export default function LotMapDashboard() {
             </Navbar>
 
             <Container fluid className="p-0">
-                <Row className="g-0"> {/* g-0 elimina el espaciado entre columnas */}
-                    {/* SIDEBAR - Panel lateral con estilo moderno */}
-{sidebarShow && (
-  <Col
-    xs={12}
-    md={3}
-    lg={2}
-    className="vh-100 p-3 sticky-top"
-    style={{ backgroundColor: "#343a40" }} // mismo color que el navbar
-  >
-    <h6
-      className="text-uppercase fw-bold mb-3"
-      style={{ color: "#ffffff", fontFamily: "Segoe UI, Roboto, sans-serif", fontSize: "0.85rem" }}
-    >
-      Control de Capas
-    </h6>
+                <Row className="g-0">
+                    {sidebarShow && (
+                      <Col
+                        xs={12}
+                        md={3}
+                        lg={2}
+                        className="vh-100 p-3 sticky-top"
+                        style={{ backgroundColor: "#343a40" }} 
+                      >
+                        <h6
+                          className="text-uppercase fw-bold mb-3"
+                          style={{ color: "#ffffff", fontFamily: "Segoe UI, Roboto, sans-serif", fontSize: "0.85rem" }}
+                        >
+                          Control de Capas
+                        </h6>
 
-    <Nav className="flex-column">
-      <span
-        className="fw-semibold mt-2 mb-1 pt-2 border-top"
-        style={{ color: "#adb5bd", fontSize: "0.75rem" }}
-      >
-        Gestión de Proyectos
-      </span>
+                        <Nav className="flex-column">
+                          <span
+                            className="fw-semibold mt-2 mb-1 pt-2 border-top"
+                            style={{ color: "#adb5bd", fontSize: "0.75rem" }}
+                          >
+                            Gestión de Proyectos
+                          </span>
 
-      <Button
-        className="mb-2 w-100 text-start py-1"
-        style={{
-          backgroundColor: "#495057",
-          color: "#ffffff",
-          border: "none",
-          fontSize: "0.8rem",
-          fontFamily: "Segoe UI, Roboto, sans-serif"
-        }}
-        onClick={() => { /* Crear Proyecto */ }}
-      >
-        Crear Proyecto
-      </Button>
+                          <Button
+                            className="mb-2 w-100 text-start py-1"
+                            style={{
+                              backgroundColor: "#495057",
+                              color: "#ffffff",
+                              border: "none",
+                              fontSize: "0.8rem",
+                              fontFamily: "Segoe UI, Roboto, sans-serif"
+                            }}
+                            onClick={() => { /* Crear Proyecto */ }}
+                          >
+                            Crear Proyecto
+                          </Button>
 
-      <Button
-        className="mb-2 w-100 text-start py-1"
-        style={{
-          backgroundColor: "#495057",
-          color: "#ffffff",
-          border: "none",
-          fontSize: "0.8rem",
-          fontFamily: "Segoe UI, Roboto, sans-serif"
-        }}
-        onClick={() => { /* Listar Proyectos */ }}
-      >
-        Listar Proyectos
-      </Button>
+                          <Button
+                            className="mb-2 w-100 text-start py-1"
+                            style={{
+                              backgroundColor: "#495057",
+                              color: "#ffffff",
+                              border: "none",
+                              fontSize: "0.8rem",
+                              fontFamily: "Segoe UI, Roboto, sans-serif"
+                            }}
+                            onClick={() => { /* Listar Proyectos */ }}
+                          >
+                            Listar Proyectos
+                          </Button>
 
-      <Button
-        className="mb-3 w-100 text-start py-1"
-        style={{
-          backgroundColor: "#495057",
-          color: "#ffffff",
-          border: "none",
-          fontSize: "0.8rem",
-          fontFamily: "Segoe UI, Roboto, sans-serif"
-        }}
-        onClick={() => { /* Gestionar Sectores */ }}
-      >
-        Gestionar Sectores
-      </Button>
+                          <Button
+                            className="mb-3 w-100 text-start py-1"
+                            style={{
+                              backgroundColor: "#495057",
+                              color: "#ffffff",
+                              border: "none",
+                              fontSize: "0.8rem",
+                              fontFamily: "Segoe UI, Roboto, sans-serif"
+                            }}
+                            onClick={() => { /* Gestionar Sectores */ }}
+                          >
+                            Gestionar Sectores
+                          </Button>
 
-      <span
-        className="fw-semibold mt-3 mb-1 pt-2 border-top"
-        style={{ color: "#adb5bd", fontSize: "0.75rem" }}
-      >
-        Herramientas de Lotes
-      </span>
+                          <span
+                            className="fw-semibold mt-3 mb-1 pt-2 border-top"
+                            style={{ color: "#adb5bd", fontSize: "0.75rem" }}
+                          >
+                            Herramientas de Lotes
+                          </span>
 
-      <Button
-        className="mb-2 w-100 text-start py-1"
-        style={{
-          backgroundColor: "#28a745",
-          color: "#ffffff",
-          border: "none",
-          fontSize: "0.8rem",
-          fontFamily: "Segoe UI, Roboto, sans-serif"
-        }}
-        onClick={() => { /* Crear Lote */ }}
-      >
-        Crear Lote
-      </Button>
+                          <Button
+                            className="mb-2 w-100 text-start py-1"
+                            style={{
+                              backgroundColor: "#28a745",
+                              color: "#ffffff",
+                              border: "none",
+                              fontSize: "0.8rem",
+                              fontFamily: "Segoe UI, Roboto, sans-serif"
+                            }}
+                            onClick={() => { /* Crear Lote */ }}
+                          >
+                            Crear Lote
+                          </Button>
 
-      <Button
-        className="mb-2 w-100 text-start py-1"
-        style={{
-          backgroundColor: "#28a745",
-          color: "#ffffff",
-          border: "none",
-          fontSize: "0.8rem",
-          fontFamily: "Segoe UI, Roboto, sans-serif"
-        }}
-        onClick={() => { /* Listar Lotes */ }}
-      >
-        Listar Lotes
-      </Button>
+                          <Button
+                            className="mb-2 w-100 text-start py-1"
+                            style={{
+                              backgroundColor: "#28a745",
+                              color: "#ffffff",
+                              border: "none",
+                              fontSize: "0.8rem",
+                              fontFamily: "Segoe UI, Roboto, sans-serif"
+                            }}
+                            onClick={() => { /* Listar Lotes */ }}
+                          >
+                            Listar Lotes
+                          </Button>
 
-      <Button
-        className="mb-2 w-100 text-start py-1"
-        style={{
-          backgroundColor: "#28a745",
-          color: "#ffffff",
-          border: "none",
-          fontSize: "0.8rem",
-          fontFamily: "Segoe UI, Roboto, sans-serif"
-        }}
-        onClick={() => { /* Calcular Áreas */ }}
-      >
-        Calcular Áreas
-      </Button>
+                          <Button
+                            className="mb-2 w-100 text-start py-1"
+                            style={{
+                              backgroundColor: "#28a745",
+                              color: "#ffffff",
+                              border: "none",
+                              fontSize: "0.8rem",
+                              fontFamily: "Segoe UI, Roboto, sans-serif"
+                            }}
+                            onClick={() => { /* Calcular Áreas */ }}
+                          >
+                            Calcular Áreas
+                          </Button>
 
-      <Button
-        className="mb-2 w-100 text-start py-1"
-        style={{
-          backgroundColor: "#28a745",
-          color: "#ffffff",
-          border: "none",
-          fontSize: "0.8rem",
-          fontFamily: "Segoe UI, Roboto, sans-serif"
-        }}
-        onClick={() => { /* Calcular Centroide */ }}
-      >
-        Calcular Centroide
-      </Button>
+                          <Button
+                            className="mb-2 w-100 text-start py-1"
+                            style={{
+                              backgroundColor: "#28a745",
+                              color: "#ffffff",
+                              border: "none",
+                              fontSize: "0.8rem",
+                              fontFamily: "Segoe UI, Roboto, sans-serif"
+                            }}
+                            onClick={() => { /* Calcular Centroide */ }}
+                          >
+                            Calcular Centroide
+                          </Button>
 
-      <Button
-        className="mb-2 w-100 text-start py-1 mt-3"
-        style={{
-          backgroundColor: "#007bff",
-          color: "#ffffff",
-          border: "none",
-          fontSize: "0.8rem",
-          fontFamily: "Segoe UI, Roboto, sans-serif"
-        }}
-        onClick={() => document.getElementById("kmlUpload")?.click()}
-      >
-        Importar KML
-      </Button>
-    </Nav>
-  </Col>
-)}
-
-
-                    {/* CONTENIDO PRINCIPAL - Columna del mapa */}
+                          <Button
+                            className="mb-2 w-100 text-start py-1 mt-3"
+                            style={{
+                              backgroundColor: "#007bff",
+                              color: "#ffffff",
+                              border: "none",
+                              fontSize: "0.8rem",
+                              fontFamily: "Segoe UI, Roboto, sans-serif"
+                            }}
+                            onClick={() => document.getElementById("kmlUpload")?.click()}
+                          >
+                            Importar KML
+                          </Button>
+                        </Nav>
+                      </Col>
+                    )}
                     <Col xs={12} md={sidebarShow ? 9 : 12} lg={sidebarShow ? 10 : 12} className="p-3">
-                        {/* KML Info y Errores - Barra de estado elegante */}
                         <Card className="mb-3 shadow-sm border-0">
                             <Card.Body className="p-3 bg-white d-flex align-items-center justify-content-between">
                                 <span className="fw-semibold text-muted">
@@ -341,8 +328,6 @@ export default function LotMapDashboard() {
                     </Col>
                 </Row>
             </Container>
-
-            {/* INPUT OCULTO DEL KML */}
             <input
                 type="file"
                 accept=".kml"
