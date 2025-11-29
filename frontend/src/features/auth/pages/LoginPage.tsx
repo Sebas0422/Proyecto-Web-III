@@ -8,11 +8,7 @@ import { setCredentials } from '../model/authSlice'
 import { useNavigate, Link } from 'react-router-dom'
 import Button from '@shared/components/Button'
 import Input from '@shared/components/Input'
-
-interface LoginValues {
-  email: string
-  password: string
-}
+import type { LoginFormValues, ApiError } from '../types/auth.types'
 
 const LoginSchema = Yup.object().shape({
   email: Yup.string().email('Email inválido').required('El email es requerido'),
@@ -24,23 +20,26 @@ const LoginPage: React.FC = () => {
   const dispatch = useAppDispatch()
   const navigate = useNavigate()
 
-  const handleSubmit = async (values: LoginValues, { setSubmitting, setFieldError }: FormikHelpers<LoginValues>) => {
+  const handleSubmit = async (values: LoginFormValues, { setSubmitting, setFieldError }: FormikHelpers<LoginFormValues>) => {
     try {
       const res = await login(values).unwrap()
-      dispatch(setCredentials({ token: res.token, user: res.user }))
-      if (res.user?.role === 'admin') navigate('/dashboard')
-      else navigate('/dashboard')
+
+      // Crear objeto user según la estructura del backend
+      const user = {
+        id: res.userId,
+        fullName: res.fullName,
+        email: res.email,
+        role: res.role,
+        tenantId: res.tenantId || null,
+      }
+
+      dispatch(setCredentials({ token: res.token, user }))
+      navigate('/dashboard')
     } catch (err: unknown) {
-      const extractMessage = (input: unknown): string => {
-        if (typeof input !== 'object' || input === null) return 'Error al iniciar sesión'
-        const obj = input as Record<string, unknown>
-        if ('data' in obj && typeof obj.data === 'object' && obj.data !== null) {
-          const data = obj.data as Record<string, unknown>
-          if ('message' in data && typeof data.message === 'string') return data.message
-        }
-        if ('message' in obj && typeof obj.message === 'string') return obj.message
-        if ('error' in obj && typeof obj.error === 'string') return obj.error
-        return 'Error al iniciar sesión'
+      const extractMessage = (error: unknown): string => {
+        if (typeof error !== 'object' || error === null) return 'Error al iniciar sesión'
+        const apiError = error as ApiError
+        return apiError.data?.message ?? apiError.message ?? apiError.error ?? 'Error al iniciar sesión'
       }
       setFieldError('email', extractMessage(err))
     } finally {
