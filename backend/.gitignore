@@ -66,11 +66,12 @@ replay_pid*
 # When using Gradle or Maven with auto-import, you should exclude module files,
 # since they will be recreated, and may cause churn.  Uncomment if using
 # auto-import.
-# .idea/artifacts
-# .idea/compiler.xml
-# .idea/jarRepositories.xml
-# .idea/modules.xml
-# .idea/*.iml
+.idea/artifacts
+.idea/compiler.xml
+.idea/jarRepositories.xml
+.idea/modules.xml
+.idea/*.iml
+.idea/*.xml
 # .idea/modules
 # *.iml
 # *.ipr
@@ -116,7 +117,7 @@ fabric.properties
 
 # *.iml
 # modules.xml
-# .idea/misc.xml
+.idea/misc.xml
 # *.ipr
 
 # Sonarlint plugin
