@@ -13,7 +13,7 @@ const containerStyle = {
   height: "88vh", // Aumentado para ocupar más espacio de la vista
   borderRadius: "0.5rem", // Bordes redondeados para un look moderno
 };
-const defaultCenter = { lat: -17.7833, lng: -63.1821 }; // Santa Cruz, Bolivia
+const defaultCenter = { lat: -17.7833, lng: -63.1821 };
 
 export default function LotMapDashboard() {
   const { isLoaded, loadError } = useJsApiLoader({
