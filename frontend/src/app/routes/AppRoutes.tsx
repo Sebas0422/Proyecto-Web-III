@@ -3,21 +3,12 @@ import { Routes, Route, Navigate } from 'react-router-dom'
 import LoginPage from '@features/auth/pages/LoginPage'
 import RegisterPage from '@features/auth/pages/RegisterPage'
 import PrivateRoute from '@shared/components/PrivateRoute'
-import RoleGuard from '@shared/components/RoleGuard'
 import { useAppSelector } from '../store/hooks'
 import type { RootState } from '../store/store'
-import ListProyecto from '@features/auth/pages/ListProyecto'
-import DashboardPage from '@features/auth/pages/company/Dashboard'
-
-const Dashboard: React.FC = () => {
-  const user = useAppSelector((s: RootState) => s.auth.user)
-  return (
-    <div style={{ padding: 20 }}>
-      <h2>Dashboard</h2>
-      <pre>{JSON.stringify(user, null, 2)}</pre>
-    </div>
-  )
-}
+import DashboardPage from '@features/dashboard/pages/DashboardPage'
+import ProjectsListPage from '@features/projects/pages/ProjectsListPage'
+import ProjectFormPage from '@features/projects/pages/ProjectFormPage'
+import LotMapDashboard from '@features/lots/LotMap'
 
 const AppRoutes: React.FC = () => {
   const token = useAppSelector((s: RootState) => s.auth.token)
@@ -26,27 +17,41 @@ const AppRoutes: React.FC = () => {
       <Route path="/" element={token ? <Navigate to="/dashboard" /> : <Navigate to="/login" />} />
       <Route path="/login" element={<LoginPage />} />
       <Route path="/register" element={<RegisterPage />} />
-   
+      <Route path='/mapas' element={<LotMapDashboard />} />
 
       <Route
         path="/dashboard"
         element={
-          //<PrivateRoute>
+          <PrivateRoute>
             <DashboardPage />
-          //</PrivateRoute>
+          </PrivateRoute>
         }
       />
 
       <Route
-        path="/admin"
+        path="/projects"
         element={
-          
-            
-           <ListProyecto />
+          <PrivateRoute>
+            <ProjectsListPage />
+          </PrivateRoute>
         }
       />
-    </Routes>
 
+      <Route
+        path="/projects/new"
+        element={
+          <PrivateRoute>
+            <ProjectFormPage />
+          </PrivateRoute>
+        }
+      />
+
+      {/* Placeholder routes */}
+      <Route path="/lots" element={<PrivateRoute><div>Lotes - En construcción</div></PrivateRoute>} />
+      <Route path="/leads" element={<PrivateRoute><div>Leads - En construcción</div></PrivateRoute>} />
+      <Route path="/reservations" element={<PrivateRoute><div>Reservas - En construcción</div></PrivateRoute>} />
+      <Route path="/reports" element={<PrivateRoute><div>Reportes - En construcción</div></PrivateRoute>} />
+    </Routes>
   )
 }
 

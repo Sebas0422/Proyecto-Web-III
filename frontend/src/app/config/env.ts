@@ -6,7 +6,7 @@ type RawEnv = {
 
 const raw = (env ?? {}) as RawEnv
 
-export const VITE_API_BASE: string = raw.VITE_API_BASE ?? 'localhost:3000/api'
+export const VITE_API_BASE: string = raw.VITE_API_BASE ?? 'http://localhost:8000'
 
 export default {
   VITE_API_BASE,
