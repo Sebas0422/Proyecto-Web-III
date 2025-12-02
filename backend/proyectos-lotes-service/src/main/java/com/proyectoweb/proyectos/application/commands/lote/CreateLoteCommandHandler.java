@@ -6,17 +6,24 @@ import com.proyectoweb.proyectos.domain.aggregates.Lote;
 import com.proyectoweb.proyectos.domain.repositories.LoteRepository;
 import com.proyectoweb.proyectos.domain.value_objects.LoteGeometria;
 import com.proyectoweb.proyectos.domain.value_objects.Precio;
+import com.proyectoweb.proyectos.infrastructure.messaging.KafkaProducerService;
+import com.proyectoweb.proyectos.infrastructure.messaging.events.LotCreatedEvent;
 import org.springframework.stereotype.Component;
 
+import java.math.BigDecimal;
+import java.time.LocalDateTime;
 import java.util.UUID;
 
 @Component
 public class CreateLoteCommandHandler implements Command.Handler<CreateLoteCommand, LoteDto> {
     
     private final LoteRepository loteRepository;
+    private final KafkaProducerService kafkaProducerService;
 
-    public CreateLoteCommandHandler(LoteRepository loteRepository) {
+    public CreateLoteCommandHandler(LoteRepository loteRepository,
+                                    KafkaProducerService kafkaProducerService) {
         this.loteRepository = loteRepository;
+        this.kafkaProducerService = kafkaProducerService;
     }
 
     @Override
@@ -39,6 +46,19 @@ public class CreateLoteCommandHandler implements Command.Handler<CreateLoteComma
 
         Lote savedLote = loteRepository.save(lote);
         
+        // Publicar evento a Kafka
+        LotCreatedEvent kafkaEvent = new LotCreatedEvent(
+            Math.abs(savedLote.getId().hashCode() * 1L), // Convert UUID to Long
+            Math.abs(savedLote.getProyectoId().hashCode() * 1L),
+            null, // tenantId - no disponible en el comando
+            savedLote.getNumeroLote(),
+            BigDecimal.valueOf(savedLote.getAreaCalculada()),
+            savedLote.getPrecio().value(),
+            savedLote.getEstado().name(),
+            LocalDateTime.now()
+        );
+        kafkaProducerService.publishLotCreated(kafkaEvent);
+        
         return new LoteDto(
                 savedLote.getId(),
                 savedLote.getProyectoId(),
@@ -54,3 +74,4 @@ public class CreateLoteCommandHandler implements Command.Handler<CreateLoteComma
         );
     }
 }
+

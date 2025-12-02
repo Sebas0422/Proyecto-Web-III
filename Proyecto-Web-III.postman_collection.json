@@ -1061,20 +1061,467 @@
 			"description": "Microservicio de pagos y comprobantes (Puerto 8084) - Clean Architecture con CQRS"
 		},
 		{
-			"name": "Reports & Admin Service",
+			"name": "Reports & Analytics Service",
 			"item": [
 				{
-					"name": "Reports",
-					"item": [],
-					"description": "Generación de reportes (próximamente)"
+					"name": "Dashboard",
+					"item": [
+						{
+							"name": "Get Dashboard Metrics",
+							"request": {
+								"auth": {
+									"type": "bearer",
+									"bearer": [
+										{
+											"key": "token",
+											"value": "{{jwt_token}}",
+											"type": "string"
+										}
+									]
+								},
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "{{gateway_url}}/api/reports/dashboard/metrics",
+									"host": [
+										"{{gateway_url}}"
+									],
+									"path": [
+										"api",
+										"reports",
+										"dashboard",
+										"metrics"
+									]
+								},
+								"description": "Obtiene métricas agregadas del dashboard: proyectos, lotes, leads, reservas, pagos"
+							},
+							"response": []
+						},
+						{
+							"name": "Export Dashboard to PDF",
+							"request": {
+								"auth": {
+									"type": "bearer",
+									"bearer": [
+										{
+											"key": "token",
+											"value": "{{jwt_token}}",
+											"type": "string"
+										}
+									]
+								},
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "{{gateway_url}}/api/reports/dashboard/metrics/export/pdf",
+									"host": [
+										"{{gateway_url}}"
+									],
+									"path": [
+										"api",
+										"reports",
+										"dashboard",
+										"metrics",
+										"export",
+										"pdf"
+									]
+								},
+								"description": "Exporta las métricas del dashboard a PDF"
+							},
+							"response": []
+						},
+						{
+							"name": "Export Dashboard to Excel",
+							"request": {
+								"auth": {
+									"type": "bearer",
+									"bearer": [
+										{
+											"key": "token",
+											"value": "{{jwt_token}}",
+											"type": "string"
+										}
+									]
+								},
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "{{gateway_url}}/api/reports/dashboard/metrics/export/excel",
+									"host": [
+										"{{gateway_url}}"
+									],
+									"path": [
+										"api",
+										"reports",
+										"dashboard",
+										"metrics",
+										"export",
+										"excel"
+									]
+								},
+								"description": "Exporta las métricas del dashboard a Excel (.xlsx)"
+							},
+							"response": []
+						}
+					],
+					"description": "Métricas del dashboard con exportación a PDF y Excel"
 				},
 				{
-					"name": "Administration",
-					"item": [],
-					"description": "Panel administrativo multi-empresa (próximamente)"
+					"name": "Sales Reports",
+					"item": [
+						{
+							"name": "Get Sales Report",
+							"request": {
+								"auth": {
+									"type": "bearer",
+									"bearer": [
+										{
+											"key": "token",
+											"value": "{{jwt_token}}",
+											"type": "string"
+										}
+									]
+								},
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "{{gateway_url}}/api/reports/sales?startDate=2025-01-01T00:00:00&endDate=2025-04-30T23:59:59",
+									"host": [
+										"{{gateway_url}}"
+									],
+									"path": [
+										"api",
+										"reports",
+										"sales"
+									],
+									"query": [
+										{
+											"key": "startDate",
+											"value": "2025-01-01T00:00:00",
+											"description": "Fecha inicio (ISO 8601)"
+										},
+										{
+											"key": "endDate",
+											"value": "2025-04-30T23:59:59",
+											"description": "Fecha fin (ISO 8601)"
+										}
+									]
+								},
+								"description": "Genera reporte de ventas con datos agregados por proyecto y mes"
+							},
+							"response": []
+						},
+						{
+							"name": "Export Sales Report to PDF",
+							"request": {
+								"auth": {
+									"type": "bearer",
+									"bearer": [
+										{
+											"key": "token",
+											"value": "{{jwt_token}}",
+											"type": "string"
+										}
+									]
+								},
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "{{gateway_url}}/api/reports/sales/export/pdf?startDate=2025-01-01T00:00:00&endDate=2025-04-30T23:59:59",
+									"host": [
+										"{{gateway_url}}"
+									],
+									"path": [
+										"api",
+										"reports",
+										"sales",
+										"export",
+										"pdf"
+									],
+									"query": [
+										{
+											"key": "startDate",
+											"value": "2025-01-01T00:00:00"
+										},
+										{
+											"key": "endDate",
+											"value": "2025-04-30T23:59:59"
+										}
+									]
+								},
+								"description": "Exporta reporte de ventas a PDF"
+							},
+							"response": []
+						},
+						{
+							"name": "Export Sales Report to Excel",
+							"request": {
+								"auth": {
+									"type": "bearer",
+									"bearer": [
+										{
+											"key": "token",
+											"value": "{{jwt_token}}",
+											"type": "string"
+										}
+									]
+								},
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "{{gateway_url}}/api/reports/sales/export/excel?startDate=2025-01-01T00:00:00&endDate=2025-04-30T23:59:59",
+									"host": [
+										"{{gateway_url}}"
+									],
+									"path": [
+										"api",
+										"reports",
+										"sales",
+										"export",
+										"excel"
+									],
+									"query": [
+										{
+											"key": "startDate",
+											"value": "2025-01-01T00:00:00"
+										},
+										{
+											"key": "endDate",
+											"value": "2025-04-30T23:59:59"
+										}
+									]
+								},
+								"description": "Exporta reporte de ventas a Excel con múltiples hojas"
+							},
+							"response": []
+						}
+					],
+					"description": "Reportes de ventas con análisis por proyecto y periodo"
+				},
+				{
+					"name": "Financial Reports",
+					"item": [
+						{
+							"name": "Get Financial Report",
+							"request": {
+								"auth": {
+									"type": "bearer",
+									"bearer": [
+										{
+											"key": "token",
+											"value": "{{jwt_token}}",
+											"type": "string"
+										}
+									]
+								},
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "{{gateway_url}}/api/reports/financial?startDate=2025-01-01T00:00:00&endDate=2025-04-30T23:59:59",
+									"host": [
+										"{{gateway_url}}"
+									],
+									"path": [
+										"api",
+										"reports",
+										"financial"
+									],
+									"query": [
+										{
+											"key": "startDate",
+											"value": "2025-01-01T00:00:00"
+										},
+										{
+											"key": "endDate",
+											"value": "2025-04-30T23:59:59"
+										}
+									]
+								},
+								"description": "Genera reporte financiero con ingresos, gastos, utilidades y márgenes"
+							},
+							"response": []
+						},
+						{
+							"name": "Export Financial Report to PDF",
+							"request": {
+								"auth": {
+									"type": "bearer",
+									"bearer": [
+										{
+											"key": "token",
+											"value": "{{jwt_token}}",
+											"type": "string"
+										}
+									]
+								},
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "{{gateway_url}}/api/reports/financial/export/pdf?startDate=2025-01-01T00:00:00&endDate=2025-04-30T23:59:59",
+									"host": [
+										"{{gateway_url}}"
+									],
+									"path": [
+										"api",
+										"reports",
+										"financial",
+										"export",
+										"pdf"
+									],
+									"query": [
+										{
+											"key": "startDate",
+											"value": "2025-01-01T00:00:00"
+										},
+										{
+											"key": "endDate",
+											"value": "2025-04-30T23:59:59"
+										}
+									]
+								},
+								"description": "Exporta reporte financiero a PDF"
+							},
+							"response": []
+						},
+						{
+							"name": "Export Financial Report to Excel",
+							"request": {
+								"auth": {
+									"type": "bearer",
+									"bearer": [
+										{
+											"key": "token",
+											"value": "{{jwt_token}}",
+											"type": "string"
+										}
+									]
+								},
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "{{gateway_url}}/api/reports/financial/export/excel?startDate=2025-01-01T00:00:00&endDate=2025-04-30T23:59:59",
+									"host": [
+										"{{gateway_url}}"
+									],
+									"path": [
+										"api",
+										"reports",
+										"financial",
+										"export",
+										"excel"
+									],
+									"query": [
+										{
+											"key": "startDate",
+											"value": "2025-01-01T00:00:00"
+										},
+										{
+											"key": "endDate",
+											"value": "2025-04-30T23:59:59"
+										}
+									]
+								},
+								"description": "Exporta reporte financiero a Excel"
+							},
+							"response": []
+						}
+					],
+					"description": "Reportes financieros con análisis de ingresos, gastos y rentabilidad"
+				},
+				{
+					"name": "Leads Reports",
+					"item": [
+						{
+							"name": "Get Leads Report",
+							"request": {
+								"auth": {
+									"type": "bearer",
+									"bearer": [
+										{
+											"key": "token",
+											"value": "{{jwt_token}}",
+											"type": "string"
+										}
+									]
+								},
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "{{gateway_url}}/api/reports/leads?startDate=2025-01-01T00:00:00&endDate=2025-04-30T23:59:59",
+									"host": [
+										"{{gateway_url}}"
+									],
+									"path": [
+										"api",
+										"reports",
+										"leads"
+									],
+									"query": [
+										{
+											"key": "startDate",
+											"value": "2025-01-01T00:00:00"
+										},
+										{
+											"key": "endDate",
+											"value": "2025-04-30T23:59:59"
+										}
+									]
+								},
+								"description": "Genera reporte de leads con tasas de conversión y análisis por fuente"
+							},
+							"response": []
+						}
+					],
+					"description": "Reportes de leads y conversión de pipeline de ventas"
+				},
+				{
+					"name": "Projects Reports",
+					"item": [
+						{
+							"name": "Get Projects Report",
+							"request": {
+								"auth": {
+									"type": "bearer",
+									"bearer": [
+										{
+											"key": "token",
+											"value": "{{jwt_token}}",
+											"type": "string"
+										}
+									]
+								},
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "{{gateway_url}}/api/reports/projects?startDate=2025-01-01T00:00:00&endDate=2025-04-30T23:59:59",
+									"host": [
+										"{{gateway_url}}"
+									],
+									"path": [
+										"api",
+										"reports",
+										"projects"
+									],
+									"query": [
+										{
+											"key": "startDate",
+											"value": "2025-01-01T00:00:00"
+										},
+										{
+											"key": "endDate",
+											"value": "2025-04-30T23:59:59"
+										}
+									]
+								},
+								"description": "Genera reporte de proyectos con disponibilidad de lotes y performance de ventas"
+							},
+							"response": []
+						}
+					],
+					"description": "Reportes de proyectos con análisis de lotes y ventas por proyecto"
 				}
 			],
-			"description": "Microservicio de reportes y administración (Puerto 8085) - En desarrollo"
+			"description": "Microservicio de reportes y analytics (Puerto 8085) - Clean Architecture con CQRS"
 		}
 	],
 	"event": [

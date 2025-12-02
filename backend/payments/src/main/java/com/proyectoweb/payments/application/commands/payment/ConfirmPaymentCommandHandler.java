@@ -4,15 +4,22 @@ import an.awesome.pipelinr.Command;
 import com.proyectoweb.payments.application.dto.PaymentDto;
 import com.proyectoweb.payments.domain.aggregates.Payment;
 import com.proyectoweb.payments.domain.repositories.PaymentRepository;
+import com.proyectoweb.payments.infrastructure.messaging.KafkaProducerService;
+import com.proyectoweb.payments.infrastructure.messaging.events.PaymentCompletedEvent;
 import org.springframework.stereotype.Component;
+
+import java.time.LocalDateTime;
 
 @Component
 public class ConfirmPaymentCommandHandler implements Command.Handler<ConfirmPaymentCommand, PaymentDto> {
 
     private final PaymentRepository paymentRepository;
+    private final KafkaProducerService kafkaProducerService;
 
-    public ConfirmPaymentCommandHandler(PaymentRepository paymentRepository) {
+    public ConfirmPaymentCommandHandler(PaymentRepository paymentRepository,
+                                        KafkaProducerService kafkaProducerService) {
         this.paymentRepository = paymentRepository;
+        this.kafkaProducerService = kafkaProducerService;
     }
 
     @Override
@@ -27,6 +34,20 @@ public class ConfirmPaymentCommandHandler implements Command.Handler<ConfirmPaym
         payment.confirm(command.transactionReference());
 
         Payment saved = paymentRepository.save(payment);
+
+        // Publicar evento de pago completado a Kafka
+        PaymentCompletedEvent kafkaEvent = new PaymentCompletedEvent(
+            Math.abs(saved.getId().hashCode() * 1L),
+            Math.abs(saved.getReservationId().hashCode() * 1L),
+            null, // lotId - agregar si está disponible
+            Math.abs(saved.getTenantId().hashCode() * 1L),
+            saved.getAmount().amount(),
+            saved.getPaymentMethod().name(),
+            saved.getPaymentDate().toLocalDate(),
+            saved.getStatus().name(),
+            LocalDateTime.now()
+        );
+        kafkaProducerService.publishPaymentCompleted(kafkaEvent);
 
         return new PaymentDto(
                 saved.getId(),
@@ -51,3 +72,4 @@ public class ConfirmPaymentCommandHandler implements Command.Handler<ConfirmPaym
         );
     }
 }
+

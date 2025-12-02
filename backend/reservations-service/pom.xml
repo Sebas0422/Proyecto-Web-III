@@ -72,7 +72,7 @@
             <artifactId>spring-boot-starter-security</artifactId>
         </dependency>
         
-        <!-- JWT -->
+		<!-- JWT -->
         <dependency>
             <groupId>io.jsonwebtoken</groupId>
             <artifactId>jjwt-api</artifactId>
@@ -90,9 +90,13 @@
             <version>0.12.3</version>
             <scope>runtime</scope>
         </dependency>
-    </dependencies>
-    
-    <build>
+
+        <!-- Spring Kafka -->
+        <dependency>
+            <groupId>org.springframework.kafka</groupId>
+            <artifactId>spring-kafka</artifactId>
+        </dependency>
+    </dependencies>    <build>
         <plugins>
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>

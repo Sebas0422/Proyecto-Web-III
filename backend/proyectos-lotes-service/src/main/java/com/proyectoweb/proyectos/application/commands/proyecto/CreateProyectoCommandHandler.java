@@ -7,17 +7,24 @@ import com.proyectoweb.proyectos.domain.repositories.ProyectoRepository;
 import com.proyectoweb.proyectos.domain.value_objects.Descripcion;
 import com.proyectoweb.proyectos.domain.value_objects.ProyectoNombre;
 import com.proyectoweb.proyectos.domain.value_objects.Ubicacion;
+import com.proyectoweb.proyectos.infrastructure.messaging.KafkaProducerService;
+import com.proyectoweb.proyectos.infrastructure.messaging.events.ProjectCreatedEvent;
 import org.springframework.stereotype.Component;
 
+import java.math.BigDecimal;
+import java.time.LocalDateTime;
 import java.util.UUID;
 
 @Component
 public class CreateProyectoCommandHandler implements Command.Handler<CreateProyectoCommand, ProyectoDto> {
     
     private final ProyectoRepository proyectoRepository;
+    private final KafkaProducerService kafkaProducerService;
 
-    public CreateProyectoCommandHandler(ProyectoRepository proyectoRepository) {
+    public CreateProyectoCommandHandler(ProyectoRepository proyectoRepository, 
+                                        KafkaProducerService kafkaProducerService) {
         this.proyectoRepository = proyectoRepository;
+        this.kafkaProducerService = kafkaProducerService;
     }
 
     @Override
@@ -34,6 +41,21 @@ public class CreateProyectoCommandHandler implements Command.Handler<CreateProye
 
         Proyecto savedProyecto = proyectoRepository.save(proyecto);
         
+        // Publicar evento a Kafka
+        ProjectCreatedEvent kafkaEvent = new ProjectCreatedEvent(
+            savedProyecto.getId().toString(),
+            savedProyecto.getTenantId().toString(),
+            savedProyecto.getNombre().value(),
+            savedProyecto.getUbicacion().value(),
+            BigDecimal.ZERO, // totalArea - agregar si existe
+            0, // totalLots - agregar si existe
+            savedProyecto.getFechaInicio().toLocalDate(),
+            savedProyecto.getFechaEstimadaFinalizacion().toLocalDate(),
+            "ACTIVO",
+            LocalDateTime.now()
+        );
+        kafkaProducerService.publishProjectCreated(kafkaEvent);
+        
         return new ProyectoDto(
                 savedProyecto.getId(),
                 savedProyecto.getTenantId(),
@@ -47,3 +69,4 @@ public class CreateProyectoCommandHandler implements Command.Handler<CreateProye
         );
     }
 }
+
