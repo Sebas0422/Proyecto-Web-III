@@ -8,7 +8,7 @@ import type { RootState } from '../store/store'
 import DashboardPage from '@features/dashboard/pages/DashboardPage'
 import ProjectsListPage from '@features/projects/pages/ProjectsListPage'
 import ProjectFormPage from '@features/projects/pages/ProjectFormPage'
-import LotMapDashboard from '@features/lots/LotMap'
+import ProyectosLotesPage from '@features/lots/LotMap'
 
 const AppRoutes: React.FC = () => {
   const token = useAppSelector((s: RootState) => s.auth.token)
@@ -17,7 +17,7 @@ const AppRoutes: React.FC = () => {
       <Route path="/" element={token ? <Navigate to="/dashboard" /> : <Navigate to="/login" />} />
       <Route path="/login" element={<LoginPage />} />
       <Route path="/register" element={<RegisterPage />} />
-      <Route path='/mapas' element={<LotMapDashboard />} />
+      <Route path='/mapas' element={<ProyectosLotesPage />} />
 
       <Route
         path="/dashboard"
