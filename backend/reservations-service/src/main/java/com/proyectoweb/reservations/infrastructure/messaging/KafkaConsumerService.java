@@ -29,26 +29,24 @@ public class KafkaConsumerService {
         logger.info("Recibido PaymentCompletedEvent para reservationId: {}", event.getReservationId());
 
         try {
-            // Buscar la reservación por ID
-            UUID reservationId = new UUID(event.getReservationId(), 0L);
+            // El reservationId ahora es un String (UUID)
+            UUID reservationId = UUID.fromString(event.getReservationId());
             Reservation reservation = reservationRepository.findById(reservationId)
                     .orElseThrow(() -> new IllegalArgumentException("Reservation not found: " + reservationId));
 
-            // Confirmar la reservación
             reservation.confirm();
             reservationRepository.save(reservation);
 
             logger.info("Reservación {} confirmada automáticamente por pago {}", 
                        reservationId, event.getPaymentId());
 
-            // Publicar evento de reservación confirmada
             com.proyectoweb.reservations.infrastructure.messaging.events.ReservationConfirmedEvent confirmedEvent = 
                 new com.proyectoweb.reservations.infrastructure.messaging.events.ReservationConfirmedEvent(
-                    Math.abs(reservation.getId().hashCode() * 1L),
+                    reservation.getId().toString(),
                     null, // leadId
-                    Math.abs(reservation.getLotId().hashCode() * 1L),
-                    Math.abs(reservation.getProjectId().hashCode() * 1L),
-                    Math.abs(reservation.getTenantId().hashCode() * 1L),
+                    reservation.getLotId().toString(),
+                    reservation.getProjectId().toString(),
+                    reservation.getTenantId().toString(),
                     event.getPaymentId(),
                     java.time.LocalDateTime.now()
                 );

@@ -11,7 +11,6 @@ public class GetLeadsReportQueryHandler implements Command.Handler<GetLeadsRepor
 
     @Override
     public LeadsReportDto handle(GetLeadsReportQuery query) {
-        // TODO: Implementar lógica real consultando base de datos
         
         List<LeadsReportDto.LeadBySourceDto> leadsBySource = List.of(
                 new LeadsReportDto.LeadBySourceDto("Facebook", 35, 15, 42.86),
@@ -37,11 +36,11 @@ public class GetLeadsReportQueryHandler implements Command.Handler<GetLeadsRepor
                 query.getStartDate(),
                 query.getEndDate(),
                 totalLeads,
-                45, // activeLeads
+                45,
                 convertedLeads,
-                15, // lostLeads
+                15,
                 conversionRate,
-                12.5, // averageConversionTime in days
+                12.5,
                 leadsBySource,
                 leadsByStatus
         );

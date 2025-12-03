@@ -48,7 +48,7 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
                 
                 UUID tenantId = null;
                 if (tenantIdObj != null) {
-                    tenantId = UUID.fromString(tenantIdObj.toString());
+                tenantId = UUID.fromString(tenantIdObj.toString());
                 }
 
                 SimpleGrantedAuthority authority = new SimpleGrantedAuthority(role);
@@ -59,7 +59,6 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
                                 Collections.singletonList(authority)
                         );
 
-                // Store tenantId in authentication details for later use
                 authentication.setDetails(tenantId);
                 SecurityContextHolder.getContext().setAuthentication(authentication);
 

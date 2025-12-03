@@ -32,7 +32,7 @@ export default function MapCreateLote({ proyectoId }: Props) {
   const [loteSeleccionado, setLoteSeleccionado] = useState<any>(null);
   const [showModal, setShowModal] = useState(false);
   const [showInfo, setShowInfo] = useState<{ lat: number; lng: number } | null>(null);
-  const [creating, setCreating] = useState(false); // Estado para indicar creación de lote
+  const [creating, setCreating] = useState(false);
 
   // Form del modal de edición
   const [form, setForm] = useState({
@@ -43,7 +43,6 @@ export default function MapCreateLote({ proyectoId }: Props) {
     observaciones: '',
   });
 
-  // Abrir modal para editar
   const abrirModal = (lote: any) => {
     setForm({
       id: lote.id,
@@ -55,7 +54,6 @@ export default function MapCreateLote({ proyectoId }: Props) {
     setShowModal(true);
   };
 
-  // Guardar cambios del modal
   const guardarCambios = async () => {
     try {
       await updateLote(form.id, {
@@ -73,14 +71,12 @@ export default function MapCreateLote({ proyectoId }: Props) {
     }
   };
 
-  // Cargar lotes desde API
   const fetchLotes = async () => {
     if (!proyectoId || !mapRef.current) return;
     try {
       const resp = await listLotes(proyectoId);
       const lotes = resp.data?.data ?? [];
 
-      // Limpiar polígonos existentes
       lotesPolygons.forEach((p) => p.setMap(null));
 
       const newPolygons: google.maps.Polygon[] = [];
@@ -99,7 +95,6 @@ export default function MapCreateLote({ proyectoId }: Props) {
           map: mapRef.current!,
         });
 
-        // Click en polígono para mostrar InfoWindow
         polygon.addListener('click', (e: any) => {
           setLoteSeleccionado(lote);
           setShowInfo({ lat: e.latLng.lat(), lng: e.latLng.lng() });
@@ -120,7 +115,6 @@ export default function MapCreateLote({ proyectoId }: Props) {
     fetchLotes();
   }, [proyectoId]);
 
-  // Configurar DrawingManager para crear lotes nuevos
   const onLoadMap = useCallback(
     (map: google.maps.Map) => {
       mapRef.current = map;
@@ -163,8 +157,8 @@ export default function MapCreateLote({ proyectoId }: Props) {
           console.log('Lote creado:', resp.data);
           console.log('Lote creado:', resp.data);
           console.log('Lote creado:', resp.data);
-          polygon.setMap(null); // remover polígono 
-          fetchLotes(); // recargar polígonos
+          polygon.setMap(null);
+          fetchLotes();
         } catch (err) {
           console.error(err);
           alert('Error creando lote (ver consola).');
@@ -218,7 +212,6 @@ export default function MapCreateLote({ proyectoId }: Props) {
         )}
       </GoogleMap>
 
-      {/* Modal edición lote */}
       <Modal show={showModal} onHide={() => setShowModal(false)}>
         <Modal.Header closeButton>
           <Modal.Title>Editar lote</Modal.Title>

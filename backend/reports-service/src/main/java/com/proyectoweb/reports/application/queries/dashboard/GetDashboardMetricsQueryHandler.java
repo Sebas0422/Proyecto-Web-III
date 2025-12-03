@@ -21,10 +21,8 @@ public class GetDashboardMetricsQueryHandler implements Command.Handler<GetDashb
     public DashboardMetricsDto handle(GetDashboardMetricsQuery query) {
         UUID tenantId = UUID.fromString(query.getTenantId());
         
-        // Consultar métricas desde la BD local (actualizadas por Kafka)
         MetricsSnapshot metrics = metricsRepository.getOrCreateByTenantId(tenantId);
         
-        // Calcular conversion rate
         double conversionRate = 0.0;
         if (metrics.getTotalLeads() > 0) {
             conversionRate = (metrics.getConvertedLeads() * 100.0) / metrics.getTotalLeads();

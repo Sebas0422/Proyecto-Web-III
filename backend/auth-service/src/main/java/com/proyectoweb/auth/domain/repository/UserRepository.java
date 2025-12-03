@@ -3,6 +3,7 @@ package com.proyectoweb.auth.domain.repository;
 import com.proyectoweb.auth.domain.model.User;
 import com.proyectoweb.auth.domain.value_objects.Email;
 
+import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
 
@@ -12,4 +13,5 @@ public interface UserRepository {
     Optional<User> findByEmail(Email email);
     boolean existsByEmail(Email email);
     void delete(UUID id);
+    List<User> findAll();
 }

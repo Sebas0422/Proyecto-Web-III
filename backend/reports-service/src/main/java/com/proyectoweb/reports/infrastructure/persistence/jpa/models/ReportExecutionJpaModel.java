@@ -27,10 +27,10 @@ public class ReportExecutionJpaModel {
     private String status;
     
     @Column(name = "parameters", columnDefinition = "TEXT")
-    private String parameters; // JSON string
+    private String parameters;
     
     @Column(name = "data", columnDefinition = "TEXT")
-    private String data; // JSON string
+    private String data;
     
     @Column(name = "generated_by")
     private String generatedBy;
@@ -47,7 +47,6 @@ public class ReportExecutionJpaModel {
     public ReportExecutionJpaModel() {
     }
 
-    // Getters and Setters
     public String getId() {
         return id;
     }

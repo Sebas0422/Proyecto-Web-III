@@ -20,7 +20,6 @@ public class User extends AggregateRoot {
     private boolean isActive;
     private boolean isEmailVerified;
 
-    // Constructor privado para crear entidad
     private User(UUID id, Email email, Password password, String firstName, String lastName, 
                  String phoneNumber, Role defaultRole) {
         super(id);
@@ -34,19 +33,16 @@ public class User extends AggregateRoot {
         this.isEmailVerified = false;
     }
 
-    // Factory method - Registro de nuevo usuario
     public static User register(Email email, Password password, String firstName, 
                                String lastName, String phoneNumber, Role role) {
         UUID userId = UUID.randomUUID();
         User user = new User(userId, email, password, firstName, lastName, phoneNumber, role);
         
-        // Evento de dominio
         user.addDomainEvent(new UserRegistered(userId, email.getValue(), role.name()));
         
         return user;
     }
 
-    // Reconstituir desde BD
     public static User reconstitute(UUID id, Email email, Password password, String firstName,
                                    String lastName, String phoneNumber, Role defaultRole,
                                    boolean isActive, boolean isEmailVerified) {
@@ -56,7 +52,6 @@ public class User extends AggregateRoot {
         return user;
     }
 
-    // Métodos de negocio
     public void updateProfile(String firstName, String lastName, String phoneNumber) {
         if (firstName != null && !firstName.trim().isEmpty()) {
             this.firstName = firstName;
@@ -72,6 +67,11 @@ public class User extends AggregateRoot {
 
     public void changePassword(Password newPassword) {
         this.password = newPassword;
+        updateTimestamp();
+    }
+
+    public void changeRole(Role newRole) {
+        this.defaultRole = newRole;
         updateTimestamp();
     }
 

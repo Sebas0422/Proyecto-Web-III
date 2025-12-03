@@ -1,4 +1,3 @@
-// User Role constants
 export const UserRole = {
   ADMIN: 'ADMIN',
   EMPRESA: 'EMPRESA',
@@ -7,7 +6,6 @@ export const UserRole = {
 
 export type UserRole = typeof UserRole[keyof typeof UserRole]
 
-// User types
 export interface User {
   id: string
   fullName: string
@@ -16,13 +14,11 @@ export interface User {
   tenantId?: string | null
 }
 
-// Auth state
 export interface AuthState {
   token: string | null
   user: User | null
 }
 
-// API Request types
 export interface LoginRequest {
   email: string
   password: string
@@ -37,7 +33,6 @@ export interface RegisterRequest {
   role: UserRole
 }
 
-// API Response types
 export interface LoginResponse {
   token: string
   userId: string
@@ -55,7 +50,6 @@ export interface RegisterResponse {
   message: string
 }
 
-// Form values
 export interface LoginFormValues {
   email: string
   password: string
@@ -70,7 +64,6 @@ export interface RegisterFormValues {
   role: UserRole
 }
 
-// Helper types
 export type ApiError = {
   data?: {
     message?: string

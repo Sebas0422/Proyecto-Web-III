@@ -32,7 +32,6 @@ public class ApiResponse<T> {
         return response;
     }
 
-    // Getters and Setters
     public boolean isSuccess() {
         return success;
     }

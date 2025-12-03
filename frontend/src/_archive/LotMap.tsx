@@ -25,7 +25,6 @@ export default function ProyectosLotesPage() {
     fechaEstimadaFinalizacion: ''
   });
 
-  // Cargar proyectos
   const fetchProyectos = async () => {
     setLoading(true);
     setError(null);
@@ -44,7 +43,6 @@ export default function ProyectosLotesPage() {
     fetchProyectos();
   }, []);
 
-  // Crear proyecto según backend
   const handleCreateProyecto = async () => {
     if (!nuevoProyecto.nombre.trim()) return alert('El nombre del proyecto es obligatorio');
     if (!nuevoProyecto.fechaInicio || !nuevoProyecto.fechaEstimadaFinalizacion) {
@@ -64,7 +62,6 @@ export default function ProyectosLotesPage() {
       setProyectos(prev => [...prev, proyectoCreado]);
       setProyectoIdActivo(proyectoCreado.id);
 
-      // Reset del form
       setNuevoProyecto({
         nombre: '',
         descripcion: '',
@@ -114,32 +111,30 @@ export default function ProyectosLotesPage() {
         )}
 
         {proyectoIdActivo && (
-        <div className="mb-4">
-          {proyectos
-            .filter(p => p.id === proyectoIdActivo)
-            .map(p => (
-              <div key={p.id} className="card mb-3">
-                <div className="card-body">
-                  <h5 className="card-title">{p.nombre}</h5>
-                  <p className="card-text">
-                    <strong>Descripción:</strong> {p.descripcion || 'Generado automáticamente desde frontend'}<br/>
-                    <strong>Ubicación:</strong> {p.ubicacion || 'Ubicación por defecto'}<br/>
-                    <strong>Fecha inicio:</strong> {p.fechaInicio || '2025-01-01T00:00:00'}<br/>
-                    <strong>Fecha estimada de finalización:</strong> {p.fechaEstimadaFinalizacion || '2025-12-31T00:00:00'}
-                  </p>
+          <div className="mb-4">
+            {proyectos
+              .filter(p => p.id === proyectoIdActivo)
+              .map(p => (
+                <div key={p.id} className="card mb-3">
+                  <div className="card-body">
+                    <h5 className="card-title">{p.nombre}</h5>
+                    <p className="card-text">
+                      <strong>Descripción:</strong> {p.descripcion || 'Generado automáticamente desde frontend'}<br />
+                      <strong>Ubicación:</strong> {p.ubicacion || 'Ubicación por defecto'}<br />
+                      <strong>Fecha inicio:</strong> {p.fechaInicio || '2025-01-01T00:00:00'}<br />
+                      <strong>Fecha estimada de finalización:</strong> {p.fechaEstimadaFinalizacion || '2025-12-31T00:00:00'}
+                    </p>
+                  </div>
                 </div>
-              </div>
-            ))
-          }
+              ))
+            }
 
-          {/* Herramientas del proyecto seleccionado */}
-          <KmlUploader proyectoId={proyectoIdActivo} />
-          <MapCreateLote proyectoId={proyectoIdActivo} />
-        </div>
-      )}
+            <KmlUploader proyectoId={proyectoIdActivo} />
+            <MapCreateLote proyectoId={proyectoIdActivo} />
+          </div>
+        )}
 
 
-        {/* Modal para crear proyecto */}
         <Modal show={showModal} onHide={() => setShowModal(false)}>
           <Modal.Header closeButton>
             <Modal.Title>Crear nuevo proyecto</Modal.Title>

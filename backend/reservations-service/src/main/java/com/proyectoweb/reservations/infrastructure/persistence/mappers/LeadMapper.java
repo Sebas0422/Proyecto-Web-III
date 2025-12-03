@@ -15,7 +15,6 @@ public class LeadMapper {
         jpa.setProjectId(domain.getProjectId());
         jpa.setLotId(domain.getLotId());
         
-        // Map CustomerInfo value object
         CustomerInfo customer = domain.getCustomerInfo();
         jpa.setCustomerName(customer.fullName());
         jpa.setCustomerEmail(customer.email());

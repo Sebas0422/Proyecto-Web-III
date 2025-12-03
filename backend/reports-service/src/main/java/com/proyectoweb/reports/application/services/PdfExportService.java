@@ -25,13 +25,11 @@ public class PdfExportService {
         
         document.open();
         
-        // Título
         Paragraph title = new Paragraph("Dashboard - Métricas Generales", TITLE_FONT);
         title.setAlignment(Element.ALIGN_CENTER);
         title.setSpacingAfter(20);
         document.add(title);
         
-        // Tabla de métricas
         PdfPTable table = new PdfPTable(2);
         table.setWidthPercentage(100);
         table.setSpacingBefore(10);
@@ -60,13 +58,11 @@ public class PdfExportService {
         
         document.open();
         
-        // Título
         Paragraph title = new Paragraph("Reporte de Ventas", TITLE_FONT);
         title.setAlignment(Element.ALIGN_CENTER);
         title.setSpacingAfter(10);
         document.add(title);
         
-        // Periodo
         Paragraph period = new Paragraph(
                 String.format("Periodo: %s - %s",
                         report.startDate().format(DATE_FORMATTER),
@@ -77,7 +73,6 @@ public class PdfExportService {
         period.setSpacingAfter(20);
         document.add(period);
         
-        // Resumen
         PdfPTable summaryTable = new PdfPTable(2);
         summaryTable.setWidthPercentage(100);
         addMetricRow(summaryTable, "Total Ventas", String.valueOf(report.totalSales()));
@@ -85,7 +80,6 @@ public class PdfExportService {
         addMetricRow(summaryTable, "Precio Promedio", String.format("%s %s", report.averageSalePrice(), report.currency()));
         document.add(summaryTable);
         
-        // Ventas por proyecto
         Paragraph projectsTitle = new Paragraph("Ventas por Proyecto", HEADER_FONT);
         projectsTitle.setSpacingBefore(20);
         projectsTitle.setSpacingAfter(10);

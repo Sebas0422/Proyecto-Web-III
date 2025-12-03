@@ -16,14 +16,12 @@ public class ReservationMapper {
         jpa.setLotId(domain.getLotId());
         jpa.setProjectId(domain.getProjectId());
         
-        // Map CustomerInfo value object
         CustomerInfo customer = domain.getCustomerInfo();
         jpa.setCustomerName(customer.fullName());
         jpa.setCustomerEmail(customer.email());
         jpa.setCustomerPhone(customer.phone());
         jpa.setCustomerDocument(customer.documentNumber());
         
-        // Map ReservationAmount value object
         jpa.setReservationAmount(domain.getReservationAmount().amount());
         
         jpa.setStatus(domain.getStatus());

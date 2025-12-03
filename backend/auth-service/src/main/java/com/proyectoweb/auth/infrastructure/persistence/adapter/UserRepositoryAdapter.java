@@ -9,6 +9,7 @@ import com.proyectoweb.auth.infrastructure.persistence.mapper.UserMapper;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Repository;
 
+import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
 
@@ -64,5 +65,12 @@ public class UserRepositoryAdapter implements UserRepository {
             user.setIsDeleted(true);
             jpaRepository.save(user);
         });
+    }
+
+    @Override
+    public List<User> findAll() {
+        return jpaRepository.findAll().stream()
+                .map(mapper::toDomain)
+                .toList();
     }
 }

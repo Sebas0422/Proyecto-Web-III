@@ -96,7 +96,6 @@ public class Lead extends AggregateRoot {
         this.updatedAt = LocalDateTime.now();
     }
 
-    // Getters
     public UUID getTenantId() { return tenantId; }
     public UUID getProjectId() { return projectId; }
     public UUID getLotId() { return lotId; }
@@ -111,7 +110,6 @@ public class Lead extends AggregateRoot {
     public LocalDateTime getCreatedAt() { return createdAt; }
     public LocalDateTime getUpdatedAt() { return updatedAt; }
 
-    // Reconstitute from persistence
     public static Lead reconstitute(
             UUID id,
             UUID tenantId,

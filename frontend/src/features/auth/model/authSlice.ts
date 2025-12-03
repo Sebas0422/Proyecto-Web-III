@@ -18,10 +18,9 @@ const authSlice = createSlice({
       state.token = action.payload.token
       state.user = action.payload.user
 
-      // Guardar en cookies con opciones seguras
       Cookies.set('token', action.payload.token, {
-        expires: 1, // 1 día
-        secure: false, // Cambiar a true en producción con HTTPS
+        expires: 1,
+        secure: false,
         sameSite: 'strict'
       })
       Cookies.set('user', JSON.stringify(action.payload.user), {
@@ -34,7 +33,6 @@ const authSlice = createSlice({
       state.token = null
       state.user = null
 
-      // Eliminar cookies
       Cookies.remove('token')
       Cookies.remove('user')
     },

@@ -5,10 +5,10 @@ import java.time.LocalDate;
 import java.time.LocalDateTime;
 
 public class PaymentCompletedEvent {
-    private Long paymentId;
-    private Long reservationId;
-    private Long lotId;
-    private Long tenantId;
+    private String paymentId;
+    private String reservationId;
+    private String lotId;
+    private String tenantId;
     private BigDecimal amount;
     private String paymentMethod;
     private LocalDate paymentDate;
@@ -18,7 +18,7 @@ public class PaymentCompletedEvent {
     public PaymentCompletedEvent() {
     }
 
-    public PaymentCompletedEvent(Long paymentId, Long reservationId, Long lotId, Long tenantId, 
+    public PaymentCompletedEvent(String paymentId, String reservationId, String lotId, String tenantId, 
                                  BigDecimal amount, String paymentMethod, LocalDate paymentDate, 
                                  String status, LocalDateTime completedAt) {
         this.paymentId = paymentId;
@@ -32,35 +32,35 @@ public class PaymentCompletedEvent {
         this.completedAt = completedAt;
     }
 
-    public Long getPaymentId() {
+    public String getPaymentId() {
         return paymentId;
     }
 
-    public void setPaymentId(Long paymentId) {
+    public void setPaymentId(String paymentId) {
         this.paymentId = paymentId;
     }
 
-    public Long getReservationId() {
+    public String getReservationId() {
         return reservationId;
     }
 
-    public void setReservationId(Long reservationId) {
+    public void setReservationId(String reservationId) {
         this.reservationId = reservationId;
     }
 
-    public Long getLotId() {
+    public String getLotId() {
         return lotId;
     }
 
-    public void setLotId(Long lotId) {
+    public void setLotId(String lotId) {
         this.lotId = lotId;
     }
 
-    public Long getTenantId() {
+    public String getTenantId() {
         return tenantId;
     }
 
-    public void setTenantId(Long tenantId) {
+    public void setTenantId(String tenantId) {
         this.tenantId = tenantId;
     }
 

@@ -21,7 +21,6 @@ public class ReportExecution {
     private LocalDateTime completedAt;
     private String errorMessage;
 
-    // Constructor privado para forzar uso de factory methods
     private ReportExecution() {
     }
 
@@ -94,7 +93,6 @@ public class ReportExecution {
         this.completedAt = LocalDateTime.now();
     }
 
-    // Getters manuales
     public String getId() {
         return id;
     }

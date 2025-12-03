@@ -41,14 +41,13 @@ public class CreateProyectoCommandHandler implements Command.Handler<CreateProye
 
         Proyecto savedProyecto = proyectoRepository.save(proyecto);
         
-        // Publicar evento a Kafka
         ProjectCreatedEvent kafkaEvent = new ProjectCreatedEvent(
             savedProyecto.getId().toString(),
             savedProyecto.getTenantId().toString(),
             savedProyecto.getNombre().value(),
             savedProyecto.getUbicacion().value(),
-            BigDecimal.ZERO, // totalArea - agregar si existe
-            0, // totalLots - agregar si existe
+            BigDecimal.ZERO,
+            0,
             savedProyecto.getFechaInicio().toLocalDate(),
             savedProyecto.getFechaEstimadaFinalizacion().toLocalDate(),
             "ACTIVO",

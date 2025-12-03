@@ -61,4 +61,9 @@ public class LeadRepositoryAdapter implements LeadRepository {
                 .map(mapper::toDomain)
                 .collect(Collectors.toList());
     }
+
+    @Override
+    public void delete(Lead lead) {
+        jpaRepository.deleteById(lead.getId());
+    }
 }

@@ -48,13 +48,12 @@ public class CreateReservationCommandHandler implements Command.Handler<CreateRe
 
         Reservation saved = reservationRepository.save(reservation);
 
-        // Publicar evento a Kafka
         ReservationCreatedEvent kafkaEvent = new ReservationCreatedEvent(
             Math.abs(saved.getId().hashCode() * 1L),
-            null, // leadId si aplica
+            null,
             Math.abs(saved.getLotId().hashCode() * 1L),
             Math.abs(saved.getProjectId().hashCode() * 1L),
-            Math.abs(saved.getTenantId().hashCode() * 1L),
+            saved.getTenantId().toString(),
             saved.getReservationAmount().amount(),
             saved.getReservationDate().toLocalDate(),
             saved.getExpirationDate().toLocalDate(),

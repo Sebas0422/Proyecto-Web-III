@@ -3,19 +3,19 @@ package com.proyectoweb.reservations.infrastructure.messaging.events;
 import java.time.LocalDateTime;
 
 public class ReservationConfirmedEvent {
-    private Long reservationId;
-    private Long leadId;
-    private Long lotId;
-    private Long projectId;
-    private Long tenantId;
-    private Long paymentId;
+    private String reservationId;
+    private String leadId;
+    private String lotId;
+    private String projectId;
+    private String tenantId;
+    private String paymentId;
     private LocalDateTime confirmedAt;
 
     public ReservationConfirmedEvent() {
     }
 
-    public ReservationConfirmedEvent(Long reservationId, Long leadId, Long lotId, Long projectId, 
-                                     Long tenantId, Long paymentId, LocalDateTime confirmedAt) {
+    public ReservationConfirmedEvent(String reservationId, String leadId, String lotId, String projectId, 
+                                     String tenantId, String paymentId, LocalDateTime confirmedAt) {
         this.reservationId = reservationId;
         this.leadId = leadId;
         this.lotId = lotId;
@@ -25,51 +25,51 @@ public class ReservationConfirmedEvent {
         this.confirmedAt = confirmedAt;
     }
 
-    public Long getReservationId() {
+    public String getReservationId() {
         return reservationId;
     }
 
-    public void setReservationId(Long reservationId) {
+    public void setReservationId(String reservationId) {
         this.reservationId = reservationId;
     }
 
-    public Long getLeadId() {
+    public String getLeadId() {
         return leadId;
     }
 
-    public void setLeadId(Long leadId) {
+    public void setLeadId(String leadId) {
         this.leadId = leadId;
     }
 
-    public Long getLotId() {
+    public String getLotId() {
         return lotId;
     }
 
-    public void setLotId(Long lotId) {
+    public void setLotId(String lotId) {
         this.lotId = lotId;
     }
 
-    public Long getProjectId() {
+    public String getProjectId() {
         return projectId;
     }
 
-    public void setProjectId(Long projectId) {
+    public void setProjectId(String projectId) {
         this.projectId = projectId;
     }
 
-    public Long getTenantId() {
+    public String getTenantId() {
         return tenantId;
     }
 
-    public void setTenantId(Long tenantId) {
+    public void setTenantId(String tenantId) {
         this.tenantId = tenantId;
     }
 
-    public Long getPaymentId() {
+    public String getPaymentId() {
         return paymentId;
     }
 
-    public void setPaymentId(Long paymentId) {
+    public void setPaymentId(String paymentId) {
         this.paymentId = paymentId;
     }
 

@@ -8,7 +8,7 @@ import com.proyectoweb.reservations.application.commands.reservation.ConfirmRese
 import com.proyectoweb.reservations.application.commands.reservation.CreateReservationCommand;
 import com.proyectoweb.reservations.application.dto.ReservationDto;
 import com.proyectoweb.reservations.application.queries.reservation.GetReservationsByTenantQuery;
-import com.proyectoweb.reservations.domain.value_objects.ReservationStatus;
+import com.proyectoweb.reservations.application.queries.reservation.GetReservationByIdQuery;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
@@ -92,6 +92,24 @@ public class ReservationController {
         ReservationDto result = command.execute(pipeline);
         
         return ResponseEntity.ok(ApiResponse.success("Reservation cancelled successfully", result));
+    }
+
+    @GetMapping("/{id}")
+    public ResponseEntity<ApiResponse<ReservationDto>> getReservationById(
+            @PathVariable UUID id,
+            Authentication authentication) {
+        
+        UUID tenantId = (UUID) authentication.getDetails();
+
+        if (tenantId == null) {
+            return ResponseEntity.status(HttpStatus.FORBIDDEN)
+                    .body(ApiResponse.error("Tenant ID not found in token", "NO_TENANT"));
+        }
+
+        GetReservationByIdQuery query = new GetReservationByIdQuery(id, tenantId);
+        ReservationDto result = query.execute(pipeline);
+        
+        return ResponseEntity.ok(ApiResponse.success(result));
     }
 
     @GetMapping

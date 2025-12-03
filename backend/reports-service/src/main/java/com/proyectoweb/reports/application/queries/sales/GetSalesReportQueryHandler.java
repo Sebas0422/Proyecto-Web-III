@@ -13,8 +13,6 @@ public class GetSalesReportQueryHandler implements Command.Handler<GetSalesRepor
 
     @Override
     public SalesReportDto handle(GetSalesReportQuery query) {
-        // TODO: Implementar lógica real consultando base de datos
-        // Por ahora retornamos datos de ejemplo
         
         List<SalesReportDto.SaleByProjectDto> salesByProject = List.of(
                 new SalesReportDto.SaleByProjectDto(

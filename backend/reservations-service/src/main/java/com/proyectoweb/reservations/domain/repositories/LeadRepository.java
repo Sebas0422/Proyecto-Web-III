@@ -14,4 +14,5 @@ public interface LeadRepository {
     List<Lead> findByTenantIdAndStatus(UUID tenantId, LeadStatus status);
     List<Lead> findByAssignedTo(UUID salesAgentId);
     List<Lead> findByProjectId(UUID projectId);
+    void delete(Lead lead);
 }

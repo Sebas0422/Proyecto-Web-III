@@ -1,26 +1,24 @@
-// src/services/lotApi.ts
-import axios from 'axios'
+import { createApi, fetchBaseQuery } from '@reduxjs/toolkit/query/react'
 import Cookies from 'js-cookie'
 
-const BASE = 'http://localhost:8000'
+const baseUrl = import.meta.env.VITE_API_BASE || 'http://localhost:8000'
 
-const api = axios.create({
-  baseURL: BASE,
-  headers: {
-    Accept: 'application/json',
-    'Content-Type': 'application/json',
-  },
-  withCredentials: true, // necesario para cookies
+export const lotApi = createApi({
+  reducerPath: 'lotApi',
+  baseQuery: fetchBaseQuery({
+    baseUrl,
+    prepareHeaders: (headers) => {
+      const token = Cookies.get('token')
+      if (token) {
+        headers.set('Authorization', `Bearer ${token}`)
+      }
+      headers.set('Accept', 'application/json')
+      headers.set('Content-Type', 'application/json')
+      return headers
+    },
+    credentials: 'include',
+  }),
+  tagTypes: ['Lot', 'Project'],
+  endpoints: (builder) => ({
+  }),
 })
-
-// Interceptor para añadir el token de cookie en Authorization
-api.interceptors.request.use((config) => {
-  const token = Cookies.get('token')
-  if (token) {
-    config.headers = config.headers ?? {}
-    config.headers.Authorization = `Bearer ${token}`
-  }
-  return config
-})
-
-export default api

@@ -23,13 +23,11 @@ public class Payment {
     private LocalDateTime createdAt;
     private LocalDateTime updatedAt;
 
-    // Constructor privado
     private Payment() {
         this.createdAt = LocalDateTime.now();
         this.updatedAt = LocalDateTime.now();
     }
 
-    // Factory Method
     public static Payment create(
             UUID tenantId,
             UUID reservationId,
@@ -56,7 +54,6 @@ public class Payment {
         return payment;
     }
 
-    // Reconstitute from persistence
     public static Payment reconstitute(
             UUID id,
             UUID tenantId,
@@ -96,7 +93,6 @@ public class Payment {
         return payment;
     }
 
-    // Business methods
     public void assignQRCode(String qrCodeData) {
         if (this.status != PaymentStatus.PENDING) {
             throw new IllegalStateException("Cannot assign QR code to non-pending payment");
@@ -146,7 +142,6 @@ public class Payment {
                (this.status == PaymentStatus.PENDING || this.status == PaymentStatus.PROCESSING);
     }
 
-    // Manual getters (domain purity - no Lombok)
     public UUID getId() { return id; }
     public UUID getTenantId() { return tenantId; }
     public UUID getReservationId() { return reservationId; }

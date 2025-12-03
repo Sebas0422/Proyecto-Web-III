@@ -8,7 +8,6 @@ public class MetricsSnapshot {
     private Long id;
     private UUID tenantId;
     
-    // Métricas de Proyectos/Lotes
     private Integer totalProjects;
     private Integer activeProjects;
     private Integer totalLots;
@@ -16,17 +15,14 @@ public class MetricsSnapshot {
     private Integer soldLots;
     private Integer reservedLots;
     
-    // Métricas de Leads
     private Integer totalLeads;
     private Integer activeLeads;
     private Integer convertedLeads;
     
-    // Métricas de Reservaciones
     private Integer totalReservations;
     private Integer confirmedReservations;
     private Integer pendingReservations;
     
-    // Métricas Financieras
     private BigDecimal totalRevenue;
     private BigDecimal pendingPayments;
     private BigDecimal confirmedPayments;
@@ -79,7 +75,6 @@ public class MetricsSnapshot {
         this.updatedAt = updatedAt;
     }
 
-    // Métodos de negocio
     public void incrementProjectCount(boolean isActive) {
         this.totalProjects++;
         if (isActive) {
@@ -166,7 +161,6 @@ public class MetricsSnapshot {
         this.updatedAt = LocalDateTime.now();
     }
 
-    // Getters
     public Long getId() { return id; }
     public UUID getTenantId() { return tenantId; }
     public Integer getTotalProjects() { return totalProjects; }

@@ -116,7 +116,6 @@ public class Reservation extends AggregateRoot {
         return LocalDateTime.now().isAfter(expirationDate) && status == ReservationStatus.PENDING;
     }
 
-    // Getters
     public UUID getTenantId() { return tenantId; }
     public UUID getLotId() { return lotId; }
     public UUID getProjectId() { return projectId; }
@@ -132,7 +131,6 @@ public class Reservation extends AggregateRoot {
     public LocalDateTime getCreatedAt() { return createdAt; }
     public LocalDateTime getUpdatedAt() { return updatedAt; }
 
-    // Reconstitute from persistence
     public static Reservation reconstitute(
             UUID id,
             UUID tenantId,

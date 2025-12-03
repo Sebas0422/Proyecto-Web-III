@@ -1,86 +1,82 @@
-import React from 'react'
-import { Formik, Form } from 'formik'
-import type { FormikHelpers } from 'formik'
-import * as Yup from 'yup'
-import { useNavigate } from 'react-router-dom'
-import Button from '@shared/components/Button'
-import Input from '@shared/components/Input'
+import { useParams } from 'react-router-dom'
+import { ArrowLeft, AlertCircle } from 'lucide-react'
+import { useGetProjectByIdQuery } from '../services/projectsApi'
+import { useProjectForm } from '../hooks/useProjectForm'
+import ProjectForm from '../components/ProjectForm'
+import DashboardLayout from '@shared/components/DashboardLayout'
 
-interface ProjectValues {
-  title: string
-  description: string
-  budget: number | ''
-  startDate: string
-  endDate: string
-}
+export default function ProjectFormPage() {
+  const { id } = useParams<{ id: string }>()
+  const isEdit = Boolean(id)
 
-const ProjectSchema = Yup.object().shape({
-  title: Yup.string().required('El título es requerido'),
-  description: Yup.string().required('La descripción es requerida'),
-  budget: Yup.number().min(0, 'El presupuesto debe ser positivo').nullable(),
-  startDate: Yup.string().required('La fecha de inicio es requerida'),
-  endDate: Yup.string().required('La fecha de fin es requerida'),
-})
+  const { data: project, isLoading: isLoadingProject } = useGetProjectByIdQuery(id!, {
+    skip: !isEdit,
+  })
 
-const ProjectFormPage: React.FC = () => {
-  const navigate = useNavigate()
+  const { handleSubmit, handleCancel, isLoading, error } = useProjectForm(id)
 
-  const handleSubmit = async (
-    values: ProjectValues,
-    { setSubmitting }: FormikHelpers<ProjectValues>,
-  ) => {
-    try {
-      // TODO: Wire this form to a backend service or RTK Query mutation.
-      // For now we just log the values and navigate to the dashboard.
-      console.log('Proyecto submit', values)
-      navigate('/dashboard')
-    } finally {
-      setSubmitting(false)
-    }
+  if (isEdit && isLoadingProject) {
+    return (
+      <DashboardLayout>
+        <div className="flex justify-center items-center py-16">
+          <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-amber-600"></div>
+        </div>
+      </DashboardLayout>
+    )
   }
 
   return (
-    <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-gray-50 to-gray-100 p-4">
-      <div className="w-full max-w-2xl">
-        <div className="text-center mb-8">
-          <h2 className="text-4xl font-bold text-gray-900 mb-2">Nuevo Proyecto</h2>
-          <p className="text-gray-600">Completa la información del proyecto</p>
-        </div>
+    <DashboardLayout>
+      <div className="max-w-3xl mx-auto p-6">
+        <button
+          onClick={handleCancel}
+          className="flex items-center gap-2 text-gray-600 hover:text-gray-900 mb-6 transition-colors"
+        >
+          <ArrowLeft size={20} />
+          <span>Volver</span>
+        </button>
 
-        <div className="bg-white rounded-2xl shadow-xl p-8 border border-gray-100">
-          <Formik
-            initialValues={{ title: '', description: '', budget: '', startDate: '', endDate: '' }}
-            validationSchema={ProjectSchema}
+        <div className="bg-white rounded-lg shadow-md p-8">
+          <div className="mb-6">
+            <h1 className="text-3xl font-bold text-gray-900 mb-2">
+              {isEdit ? 'Editar Proyecto' : 'Nuevo Proyecto'}
+            </h1>
+            <p className="text-gray-600">
+              {isEdit
+                ? 'Actualiza la información del proyecto'
+                : 'Completa los datos para crear un nuevo proyecto'}
+            </p>
+          </div>
+
+          {error && (
+            <div className="mb-6 p-4 bg-red-50 border border-red-200 rounded-lg flex items-start gap-3">
+              <AlertCircle size={20} className="text-red-600 flex-shrink-0 mt-0.5" />
+              <div>
+                <p className="text-red-800 font-medium">Error al guardar</p>
+                <p className="text-red-600 text-sm">{error}</p>
+              </div>
+            </div>
+          )}
+
+          <ProjectForm
+            initialValues={
+              project
+                ? {
+                  nombre: project.nombre,
+                  descripcion: project.descripcion,
+                  ubicacion: project.ubicacion,
+                  fechaInicio: project.fechaInicio.split('T')[0],
+                  fechaEstimadaFinalizacion: project.fechaEstimadaFinalizacion?.split('T')[0] || '',
+                }
+                : undefined
+            }
             onSubmit={handleSubmit}
-          >
-            {({ isSubmitting }) => (
-              <Form className="space-y-5">
-                <Input name="title" label="Título" type="text" placeholder="Ej: Proyecto de sitio web" />
-
-                <Input
-                  name="description"
-                  label="Descripción"
-                  type="text"
-                  placeholder="Descripción breve del proyecto"
-                />
-
-                <Input name="budget" label="Presupuesto" type="number" placeholder="0" />
-
-                <div className="grid grid-cols-2 gap-4">
-                  <Input name="startDate" label="Fecha inicio" type="date" placeholder="" />
-                  <Input name="endDate" label="Fecha fin" type="date" placeholder="" />
-                </div>
-
-                <Button type="submit" variant="primary" size="lg" isLoading={isSubmitting} className="w-full">
-                  Guardar proyecto
-                </Button>
-              </Form>
-            )}
-          </Formik>
+            onCancel={handleCancel}
+            isLoading={isLoading}
+            isEdit={isEdit}
+          />
         </div>
       </div>
-    </div>
+    </DashboardLayout>
   )
 }
-
-export default ProjectFormPage

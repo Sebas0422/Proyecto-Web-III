@@ -9,7 +9,7 @@ public class ReservationCreatedEvent {
     private Long leadId;
     private Long lotId;
     private Long projectId;
-    private Long tenantId;
+    private String tenantId;
     private BigDecimal reservationAmount;
     private LocalDate reservationDate;
     private LocalDate expirationDate;
@@ -20,7 +20,7 @@ public class ReservationCreatedEvent {
     }
 
     public ReservationCreatedEvent(Long reservationId, Long leadId, Long lotId, Long projectId, 
-                                   Long tenantId, BigDecimal reservationAmount, LocalDate reservationDate, 
+                                   String tenantId, BigDecimal reservationAmount, LocalDate reservationDate, 
                                    LocalDate expirationDate, String status, LocalDateTime createdAt) {
         this.reservationId = reservationId;
         this.leadId = leadId;
@@ -66,11 +66,11 @@ public class ReservationCreatedEvent {
         this.projectId = projectId;
     }
 
-    public Long getTenantId() {
+    public String getTenantId() {
         return tenantId;
     }
 
-    public void setTenantId(Long tenantId) {
+    public void setTenantId(String tenantId) {
         this.tenantId = tenantId;
     }
 
