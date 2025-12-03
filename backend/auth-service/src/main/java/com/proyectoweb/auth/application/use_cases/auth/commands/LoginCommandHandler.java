@@ -67,15 +67,15 @@ public class LoginCommandHandler implements Command.Handler<LoginCommand, LoginR
     }
 
     private UUID getTenantId(User user) {
-        // Si es CLIENTE, no tiene tenant
-        if (user.getDefaultRole().isCliente()) {
-            return null;
-        }
-
-        // Buscar primera empresa asignada
+        // Buscar primera empresa asignada (ahora todos los roles pueden tener empresa)
         List<UserCompany> userCompanies = userCompanyRepository.findByUserId(user.getId());
         if (!userCompanies.isEmpty()) {
-            return userCompanies.get(0).getCompanyId();
+            // Retornar la primera empresa activa
+            return userCompanies.stream()
+                    .filter(UserCompany::isActive)
+                    .findFirst()
+                    .map(UserCompany::getCompanyId)
+                    .orElse(null);
         }
 
         return null;

@@ -19,8 +19,6 @@ public record LoteGeometria(Polygon polygon) {
     }
 
     public double calcularArea() {
-        // Retorna el área en unidades de coordenadas (grados)
-        // Para cálculos precisos en metros cuadrados, se debería proyectar a UTM
         return polygon.getArea();
     }
 
@@ -47,7 +45,6 @@ public record LoteGeometria(Polygon polygon) {
             throw new IllegalArgumentException("Se requieren al menos 4 coordenadas para formar un polígono");
         }
         
-        // Asegurar que el polígono esté cerrado
         if (!coordinates[0].equals(coordinates[coordinates.length - 1])) {
             Coordinate[] closedCoordinates = new Coordinate[coordinates.length + 1];
             System.arraycopy(coordinates, 0, closedCoordinates, 0, coordinates.length);

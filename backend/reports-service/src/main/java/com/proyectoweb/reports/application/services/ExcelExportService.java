@@ -18,21 +18,18 @@ public class ExcelExportService {
         Workbook workbook = new XSSFWorkbook();
         Sheet sheet = workbook.createSheet("Dashboard Metrics");
         
-        // Estilos
         CellStyle headerStyle = createHeaderStyle(workbook);
         CellStyle dataStyle = createDataStyle(workbook);
         
         int rowNum = 0;
         
-        // Título
         Row titleRow = sheet.createRow(rowNum++);
         Cell titleCell = titleRow.createCell(0);
         titleCell.setCellValue("Dashboard - Métricas Generales");
         titleCell.setCellStyle(headerStyle);
         
-        rowNum++; // Espacio
+        rowNum++;
         
-        // Datos
         createMetricRow(sheet, rowNum++, "Total Proyectos", metrics.totalProjects(), headerStyle, dataStyle);
         createMetricRow(sheet, rowNum++, "Proyectos Activos", metrics.activeProjects(), headerStyle, dataStyle);
         createMetricRow(sheet, rowNum++, "Total Lotes", metrics.totalLots(), headerStyle, dataStyle);
@@ -47,7 +44,6 @@ public class ExcelExportService {
         createMetricRow(sheet, rowNum++, "Pagos Pendientes", metrics.pendingPayments() + " " + metrics.currency(), headerStyle, dataStyle);
         createMetricRow(sheet, rowNum++, "Pagos Confirmados", metrics.confirmedPayments() + " " + metrics.currency(), headerStyle, dataStyle);
         
-        // Auto-size columnas
         sheet.autoSizeColumn(0);
         sheet.autoSizeColumn(1);
         
@@ -61,7 +57,6 @@ public class ExcelExportService {
     public byte[] exportSalesReportToExcel(SalesReportDto report) throws IOException {
         Workbook workbook = new XSSFWorkbook();
         
-        // Hoja de resumen
         Sheet summarySheet = workbook.createSheet("Resumen");
         CellStyle headerStyle = createHeaderStyle(workbook);
         CellStyle dataStyle = createDataStyle(workbook);
@@ -76,7 +71,6 @@ public class ExcelExportService {
         createMetricRow(summarySheet, rowNum++, "Ingresos Totales", report.totalRevenue() + " " + report.currency(), headerStyle, dataStyle);
         createMetricRow(summarySheet, rowNum++, "Precio Promedio", report.averageSalePrice() + " " + report.currency(), headerStyle, dataStyle);
         
-        // Hoja de ventas por proyecto
         Sheet projectsSheet = workbook.createSheet("Ventas por Proyecto");
         rowNum = 0;
         
@@ -96,7 +90,6 @@ public class ExcelExportService {
         projectsSheet.autoSizeColumn(1);
         projectsSheet.autoSizeColumn(2);
         
-        // Hoja de ventas por mes
         Sheet monthlySheet = workbook.createSheet("Ventas por Mes");
         rowNum = 0;
         

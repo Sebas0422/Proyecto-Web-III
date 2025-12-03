@@ -1,9 +1,13 @@
 package com.proyectoweb.auth.api.controller;
 
 import an.awesome.pipelinr.Pipeline;
+import com.proyectoweb.auth.api.dto.UpdateCompanyRequest;
 import com.proyectoweb.auth.api.dto.request.AssignUserToCompanyRequest;
 import com.proyectoweb.auth.api.dto.request.CreateCompanyRequest;
 import com.proyectoweb.auth.api.dto.response.MessageResponse;
+import com.proyectoweb.auth.application.commands.company.DeactivateCompanyCommand;
+import com.proyectoweb.auth.application.commands.company.UpdateCompanyCommand;
+import com.proyectoweb.auth.application.queries.company.GetCompanyByIdQuery;
 import com.proyectoweb.auth.application.use_cases.company.commands.AssignUserToCompanyCommand;
 import com.proyectoweb.auth.application.use_cases.company.commands.CreateCompanyCommand;
 import com.proyectoweb.auth.application.use_cases.company.queries.CompanyDto;
@@ -66,5 +70,39 @@ public class CompanyController {
         command.execute(pipeline);
 
         return ResponseEntity.ok(new MessageResponse("Usuario asignado a empresa exitosamente"));
+    }
+
+    @GetMapping("/{id}")
+    @PreAuthorize("hasAuthority('ADMIN')")
+    public ResponseEntity<CompanyDto> getCompanyById(@PathVariable UUID id) {
+        GetCompanyByIdQuery query = new GetCompanyByIdQuery(id);
+        CompanyDto company = query.execute(pipeline);
+        return ResponseEntity.ok(company);
+    }
+
+    @PutMapping("/{id}")
+    @PreAuthorize("hasAuthority('ADMIN')")
+    public ResponseEntity<CompanyDto> updateCompany(
+            @PathVariable UUID id,
+            @Valid @RequestBody UpdateCompanyRequest request) {
+        UpdateCompanyCommand command = new UpdateCompanyCommand(
+                id,
+                request.name(),
+                request.address(),
+                request.phoneNumber(),
+                request.email(),
+                request.logoUrl()
+        );
+
+        CompanyDto updatedCompany = command.execute(pipeline);
+        return ResponseEntity.ok(updatedCompany);
+    }
+
+    @DeleteMapping("/{id}")
+    @PreAuthorize("hasAuthority('ADMIN')")
+    public ResponseEntity<MessageResponse> deactivateCompany(@PathVariable UUID id) {
+        DeactivateCompanyCommand command = new DeactivateCompanyCommand(id);
+        command.execute(pipeline);
+        return ResponseEntity.ok(new MessageResponse("Empresa desactivada exitosamente"));
     }
 }

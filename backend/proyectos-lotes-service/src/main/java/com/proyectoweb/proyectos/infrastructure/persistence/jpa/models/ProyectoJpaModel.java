@@ -47,10 +47,8 @@ public class ProyectoJpaModel {
     @Column(name = "updated_at")
     private LocalDateTime updatedAt;
 
-    // Constructors
     public ProyectoJpaModel() {}
 
-    // Getters and Setters
     public UUID getId() { return id; }
     public void setId(UUID id) { this.id = id; }
 

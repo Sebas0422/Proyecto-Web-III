@@ -46,13 +46,12 @@ public class CreateLeadCommandHandler implements Command.Handler<CreateLeadComma
 
         Lead saved = leadRepository.save(lead);
 
-        // Publicar evento a Kafka
         LeadCreatedEvent kafkaEvent = new LeadCreatedEvent(
             Math.abs(saved.getId().hashCode() * 1L),
             Math.abs(saved.getTenantId().hashCode() * 1L),
-            saved.getCustomerInfo().fullName().split(" ")[0], // firstName
+            saved.getCustomerInfo().fullName().split(" ")[0],
             saved.getCustomerInfo().fullName().split(" ").length > 1 ? 
-                saved.getCustomerInfo().fullName().split(" ")[1] : "", // lastName
+                saved.getCustomerInfo().fullName().split(" ")[1] : "",
             saved.getCustomerInfo().email(),
             saved.getCustomerInfo().phone(),
             saved.getStatus().name(),

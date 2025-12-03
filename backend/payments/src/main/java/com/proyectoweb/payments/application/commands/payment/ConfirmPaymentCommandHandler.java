@@ -24,52 +24,67 @@ public class ConfirmPaymentCommandHandler implements Command.Handler<ConfirmPaym
 
     @Override
     public PaymentDto handle(ConfirmPaymentCommand command) {
-        Payment payment = paymentRepository.findById(command.paymentId())
-                .orElseThrow(() -> new IllegalArgumentException("Payment not found: " + command.paymentId()));
+        try {
+            Payment payment = paymentRepository.findById(command.paymentId())
+                    .orElseThrow(() -> new IllegalArgumentException("Payment not found: " + command.paymentId()));
 
-        if (!payment.getTenantId().equals(command.tenantId())) {
-            throw new IllegalArgumentException("Payment does not belong to tenant");
-        }
+            if (!payment.getTenantId().equals(command.tenantId())) {
+                throw new IllegalArgumentException("Payment does not belong to tenant");
+            }
 
-        payment.confirm(command.transactionReference());
+            payment.confirm(command.transactionReference());
 
-        Payment saved = paymentRepository.save(payment);
+            Payment saved = paymentRepository.save(payment);
 
-        // Publicar evento de pago completado a Kafka
-        PaymentCompletedEvent kafkaEvent = new PaymentCompletedEvent(
-            Math.abs(saved.getId().hashCode() * 1L),
-            Math.abs(saved.getReservationId().hashCode() * 1L),
-            null, // lotId - agregar si está disponible
-            Math.abs(saved.getTenantId().hashCode() * 1L),
-            saved.getAmount().amount(),
-            saved.getPaymentMethod().name(),
-            saved.getPaymentDate().toLocalDate(),
-            saved.getStatus().name(),
-            LocalDateTime.now()
-        );
-        kafkaProducerService.publishPaymentCompleted(kafkaEvent);
-
-        return new PaymentDto(
-                saved.getId(),
-                saved.getTenantId(),
-                saved.getReservationId(),
-                saved.getCustomerInfo().fullName(),
-                saved.getCustomerInfo().email(),
-                saved.getCustomerInfo().phone(),
-                saved.getCustomerInfo().documentNumber(),
+            // Publicar evento de pago completado a Kafka
+            PaymentCompletedEvent kafkaEvent = new PaymentCompletedEvent(
+                saved.getId().toString(),
+                saved.getReservationId().toString(),
+                null, // lotId - agregar si está disponible
+                saved.getTenantId().toString(),
                 saved.getAmount().amount(),
-                saved.getAmount().currency(),
                 saved.getPaymentMethod().name(),
+                saved.getPaymentDate() != null ? saved.getPaymentDate().toLocalDate() : java.time.LocalDate.now(),
                 saved.getStatus().name(),
-                saved.getTransactionReference(),
-                saved.getQrCodeData(),
-                saved.getPaymentDate(),
-                saved.getExpirationDate(),
-                saved.getConfirmedAt(),
-                saved.getNotes(),
-                saved.getCreatedBy(),
-                saved.getCreatedAt()
-        );
+                LocalDateTime.now()
+            );
+            
+            try {
+                kafkaProducerService.publishPaymentCompleted(kafkaEvent);
+            } catch (Exception e) {
+                System.err.println("Error publishing to Kafka: " + e.getMessage());
+                e.printStackTrace();
+                // No lanzar la excepción, el pago ya está confirmado
+            }
+
+            return new PaymentDto(
+                    saved.getId(),
+                    saved.getTenantId(),
+                    saved.getReservationId(),
+                    saved.getCustomerInfo().fullName(),
+                    saved.getCustomerInfo().email(),
+                    saved.getCustomerInfo().phone(),
+                    saved.getCustomerInfo().documentNumber(),
+                    saved.getAmount().amount(),
+                    saved.getAmount().currency(),
+                    saved.getPaymentMethod().name(),
+                    saved.getStatus().name(),
+                    saved.getTransactionReference(),
+                    saved.getQrCodeData(),
+                    saved.getPaymentDate(),
+                    saved.getExpirationDate(),
+                    saved.getConfirmedAt(),
+                    saved.getNotes(),
+                    saved.getCreatedBy(),
+                    saved.getCreatedAt()
+            );
+        } catch (IllegalArgumentException | IllegalStateException e) {
+            throw e;
+        } catch (Exception e) {
+            System.err.println("Error confirming payment: " + e.getMessage());
+            e.printStackTrace();
+            throw new RuntimeException("Error confirming payment: " + e.getMessage(), e);
+        }
     }
 }
 

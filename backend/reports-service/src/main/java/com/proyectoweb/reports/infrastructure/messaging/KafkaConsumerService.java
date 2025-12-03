@@ -28,7 +28,6 @@ public class KafkaConsumerService {
     @KafkaListener(topics = "company-events", groupId = "reports-service-group")
     public void consumeCompanyEvents(String event) {
         logger.info("Recibido evento de company: {}", event);
-        // Las métricas de company no están en el dashboard actual, solo logging
     }
 
     @KafkaListener(topics = "project-events", groupId = "reports-service-group")
@@ -127,6 +126,7 @@ public class KafkaConsumerService {
         try {
             Map<String, Object> eventData = objectMapper.readValue(event, Map.class);
             
+            // tenantId ahora viene como String (UUID)
             String tenantIdStr = (String) eventData.get("tenantId");
             UUID tenantId = UUID.fromString(tenantIdStr);
             
@@ -155,6 +155,5 @@ public class KafkaConsumerService {
     @KafkaListener(topics = "receipt-events", groupId = "reports-service-group")
     public void consumeReceiptEvents(String event) {
         logger.info("Recibido evento de receipt: {}", event);
-        // Los recibos no están en el dashboard actual, solo logging
     }
 }

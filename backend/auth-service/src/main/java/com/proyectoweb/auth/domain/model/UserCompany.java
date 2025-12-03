@@ -73,8 +73,6 @@ public class UserCompany extends Entity {
         if (role == null) {
             throw new IllegalArgumentException("Role no puede ser nulo");
         }
-        if (role == Role.CLIENTE) {
-            throw new IllegalArgumentException("Los clientes no pueden ser asignados a empresas");
-        }
+        // Permitir asignar cualquier rol (CLIENTE, EMPRESA, ADMIN) a una empresa
     }
 }

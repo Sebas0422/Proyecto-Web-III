@@ -46,11 +46,10 @@ public class CreateLoteCommandHandler implements Command.Handler<CreateLoteComma
 
         Lote savedLote = loteRepository.save(lote);
         
-        // Publicar evento a Kafka
         LotCreatedEvent kafkaEvent = new LotCreatedEvent(
-            Math.abs(savedLote.getId().hashCode() * 1L), // Convert UUID to Long
+            Math.abs(savedLote.getId().hashCode() * 1L),
             Math.abs(savedLote.getProyectoId().hashCode() * 1L),
-            null, // tenantId - no disponible en el comando
+            null,
             savedLote.getNumeroLote(),
             BigDecimal.valueOf(savedLote.getAreaCalculada()),
             savedLote.getPrecio().value(),

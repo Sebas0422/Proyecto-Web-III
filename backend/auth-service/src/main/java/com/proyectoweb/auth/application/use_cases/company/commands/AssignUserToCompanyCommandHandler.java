@@ -68,12 +68,7 @@ public class AssignUserToCompanyCommandHandler implements Command.Handler<Assign
 
     private Role parseRole(String roleStr) {
         try {
-            Role role = Role.valueOf(roleStr.toUpperCase());
-            if (role == Role.CLIENTE) {
-                throw new BusinessRuleValidationException(
-                    "No se puede asignar el rol CLIENTE a una empresa");
-            }
-            return role;
+            return Role.valueOf(roleStr.toUpperCase());
         } catch (IllegalArgumentException e) {
             throw new BusinessRuleValidationException("Rol inválido: " + roleStr);
         }

@@ -20,12 +20,10 @@ public class Receipt {
     private UUID issuedBy;
     private LocalDateTime createdAt;
 
-    // Constructor privado
     private Receipt() {
         this.createdAt = LocalDateTime.now();
     }
 
-    // Factory Method
     public static Receipt generate(
             UUID tenantId,
             UUID paymentId,
@@ -53,7 +51,6 @@ public class Receipt {
         return receipt;
     }
 
-    // Reconstitute from persistence
     public static Receipt reconstitute(
             UUID id,
             UUID tenantId,
@@ -87,7 +84,6 @@ public class Receipt {
         return receipt;
     }
 
-    // Business methods
     public void attachPdf(String pdfPath) {
         if (pdfPath == null || pdfPath.isBlank()) {
             throw new IllegalArgumentException("PDF path cannot be empty");
@@ -95,7 +91,6 @@ public class Receipt {
         this.pdfPath = pdfPath;
     }
 
-    // Manual getters (domain purity - no Lombok)
     public UUID getId() { return id; }
     public UUID getTenantId() { return tenantId; }
     public UUID getPaymentId() { return paymentId; }

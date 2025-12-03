@@ -30,11 +30,11 @@ public class CreateLeadRequest {
     private String source;
     
     @Size(max = 20, message = "Interest level must not exceed 20 characters")
-    private String interestLevel = "MEDIUM"; // HIGH, MEDIUM, LOW
+    private String interestLevel = "MEDIUM";
     
     private String notes;
     
-    private UUID projectId; // Optional
+    private UUID projectId;
     
-    private UUID lotId; // Optional
+    private UUID lotId;
 }

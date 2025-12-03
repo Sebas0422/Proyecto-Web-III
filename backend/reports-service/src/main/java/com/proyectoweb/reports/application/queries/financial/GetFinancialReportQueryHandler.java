@@ -13,7 +13,6 @@ public class GetFinancialReportQueryHandler implements Command.Handler<GetFinanc
 
     @Override
     public FinancialReportDto handle(GetFinancialReportQuery query) {
-        // TODO: Implementar lógica real consultando base de datos
         
         List<FinancialReportDto.IncomeBySourceDto> incomeBySource = List.of(
                 new FinancialReportDto.IncomeBySourceDto("Venta de Lotes", new BigDecimal("1100000.00"), "BOB"),

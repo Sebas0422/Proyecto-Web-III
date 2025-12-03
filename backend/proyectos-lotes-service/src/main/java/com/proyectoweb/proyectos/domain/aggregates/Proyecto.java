@@ -90,6 +90,42 @@ public class Proyecto extends AggregateRoot {
         this.updatedAt = LocalDateTime.now();
     }
 
+    public void deactivate() {
+        this.activo = false;
+        this.updatedAt = LocalDateTime.now();
+    }
+
+    public void updateNombre(ProyectoNombre nombre) {
+        this.nombre = nombre;
+        this.updatedAt = LocalDateTime.now();
+    }
+
+    public void updateDescripcion(Descripcion descripcion) {
+        this.descripcion = descripcion;
+        this.updatedAt = LocalDateTime.now();
+    }
+
+    public void updateUbicacion(Ubicacion ubicacion) {
+        this.ubicacion = ubicacion;
+        this.updatedAt = LocalDateTime.now();
+    }
+
+    public void updateFechaInicio(LocalDateTime fechaInicio) {
+        if (this.fechaEstimadaFinalizacion != null && fechaInicio.isAfter(this.fechaEstimadaFinalizacion)) {
+            throw new IllegalArgumentException("La fecha de inicio no puede ser posterior a la fecha estimada de finalización");
+        }
+        this.fechaInicio = fechaInicio;
+        this.updatedAt = LocalDateTime.now();
+    }
+
+    public void updateFechaEstimadaFinalizacion(LocalDateTime fechaEstimadaFinalizacion) {
+        if (fechaEstimadaFinalizacion != null && fechaEstimadaFinalizacion.isBefore(this.fechaInicio)) {
+            throw new IllegalArgumentException("La fecha estimada de finalización no puede ser anterior a la fecha de inicio");
+        }
+        this.fechaEstimadaFinalizacion = fechaEstimadaFinalizacion;
+        this.updatedAt = LocalDateTime.now();
+    }
+
     // Getters
     public UUID getTenantId() { return tenantId; }
     public ProyectoNombre getNombre() { return nombre; }

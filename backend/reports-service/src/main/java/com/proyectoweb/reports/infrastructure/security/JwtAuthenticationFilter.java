@@ -46,7 +46,6 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
                 
                 logger.info("✅ Usuario autenticado: userId={}, role={}, tenantId={}", userId, role, tenantId);
 
-                // Store tenantId in request attribute for controllers
                 request.setAttribute("tenantId", tenantId);
                 request.setAttribute("userId", userId);
                 request.setAttribute("role", role);

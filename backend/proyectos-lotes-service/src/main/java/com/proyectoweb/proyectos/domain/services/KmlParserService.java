@@ -92,7 +92,6 @@ public class KmlParserService {
         Coordinate[] jtsCoordinates = new Coordinate[kmlCoordinates.size()];
         for (int i = 0; i < kmlCoordinates.size(); i++) {
             de.micromata.opengis.kml.v_2_2_0.Coordinate kmlCoord = kmlCoordinates.get(i);
-            // KML usa (longitud, latitud, altitud)
             jtsCoordinates[i] = new Coordinate(kmlCoord.getLongitude(), kmlCoord.getLatitude());
         }
 

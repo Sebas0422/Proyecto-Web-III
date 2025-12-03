@@ -24,7 +24,6 @@ const LoginPage: React.FC = () => {
     try {
       const res = await login(values).unwrap()
 
-      // Crear objeto user según la estructura del backend
       const user = {
         id: res.userId,
         fullName: res.fullName,

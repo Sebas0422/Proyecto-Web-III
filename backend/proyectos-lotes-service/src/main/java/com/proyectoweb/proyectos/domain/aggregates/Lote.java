@@ -128,6 +128,34 @@ public class Lote extends AggregateRoot {
         this.updatedAt = LocalDateTime.now();
     }
 
+    public void updatePrecio(Precio nuevoPrecio) {
+        if (this.estado == EstadoLote.VENDIDO) {
+            throw new IllegalStateException("No se puede actualizar el precio de un lote vendido");
+        }
+        if (nuevoPrecio == null) {
+            throw new IllegalArgumentException("El precio no puede ser nulo");
+        }
+        this.precio = nuevoPrecio;
+        this.updatedAt = LocalDateTime.now();
+    }
+
+    public void updateEstado(EstadoLote nuevoEstado) {
+        if (nuevoEstado == null) {
+            throw new IllegalArgumentException("El estado no puede ser nulo");
+        }
+        // Validaciones de transiciones de estado
+        if (this.estado == EstadoLote.VENDIDO && nuevoEstado != EstadoLote.VENDIDO) {
+            throw new IllegalStateException("No se puede cambiar el estado de un lote vendido");
+        }
+        this.estado = nuevoEstado;
+        this.updatedAt = LocalDateTime.now();
+    }
+
+    public void updateObservaciones(String nuevasObservaciones) {
+        this.observaciones = nuevasObservaciones;
+        this.updatedAt = LocalDateTime.now();
+    }
+
     // Getters
     public UUID getProyectoId() { return proyectoId; }
     public String getNumeroLote() { return numeroLote; }

@@ -2,6 +2,8 @@ package com.proyectoweb.reservations.infrastructure.messaging;
 
 import com.proyectoweb.reservations.infrastructure.messaging.events.LeadConvertedEvent;
 import com.proyectoweb.reservations.infrastructure.messaging.events.LeadCreatedEvent;
+import com.proyectoweb.reservations.infrastructure.messaging.events.LeadDeletedEvent;
+import com.proyectoweb.reservations.infrastructure.messaging.events.LeadStatusChangedEvent;
 import com.proyectoweb.reservations.infrastructure.messaging.events.ReservationConfirmedEvent;
 import com.proyectoweb.reservations.infrastructure.messaging.events.ReservationCreatedEvent;
 import org.springframework.kafka.core.KafkaTemplate;
@@ -32,6 +34,14 @@ public class KafkaProducerService {
     }
 
     public void publishLeadConverted(LeadConvertedEvent event) {
+        kafkaTemplate.send(LEAD_EVENTS_TOPIC, event.getTenantId().toString(), event);
+    }
+
+    public void publishLeadStatusChanged(LeadStatusChangedEvent event) {
+        kafkaTemplate.send(LEAD_EVENTS_TOPIC, event.getTenantId().toString(), event);
+    }
+
+    public void publishLeadDeleted(LeadDeletedEvent event) {
         kafkaTemplate.send(LEAD_EVENTS_TOPIC, event.getTenantId().toString(), event);
     }
 }

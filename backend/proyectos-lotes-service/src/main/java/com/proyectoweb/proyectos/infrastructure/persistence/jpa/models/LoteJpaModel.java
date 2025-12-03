@@ -59,10 +59,8 @@ public class LoteJpaModel {
     @Column(name = "updated_at")
     private LocalDateTime updatedAt;
 
-    // Constructors
     public LoteJpaModel() {}
 
-    // Getters and Setters
     public UUID getId() { return id; }
     public void setId(UUID id) { this.id = id; }
 

@@ -38,7 +38,7 @@ public class CreateReservationRequest {
     
     @Min(value = 1, message = "Expiration days must be at least 1")
     @Max(value = 90, message = "Expiration days must not exceed 90")
-    private int expirationDays = 7; // Default 7 days
+    private int expirationDays = 7;
     
     private String notes;
 }

@@ -13,7 +13,6 @@ public class GetProjectsReportQueryHandler implements Command.Handler<GetProject
 
     @Override
     public ProjectsReportDto handle(GetProjectsReportQuery query) {
-        // TODO: Implementar lógica real consultando base de datos
         
         List<ProjectsReportDto.ProjectDetailsDto> projectDetails = List.of(
                 new ProjectsReportDto.ProjectDetailsDto(
