@@ -163,14 +163,25 @@ export default function ProjectDetailPage() {
             <h2 className="text-xl font-semibold text-gray-900">Lotes del Proyecto</h2>
 
             {/* Todos pueden ver lotes */}
-            <PermissionGuard permissions="lots:view">
+            <div>
+              <PermissionGuard permissions="lots:view">
               <button
                 onClick={() => navigate(`/projects/${project.id}/lots`)}
-                className="px-4 py-2 bg-amber-600 text-white rounded-lg hover:bg-amber-700 transition-colors"
+                className="mr-4 px-4 py-2 bg-amber-600 text-white rounded-lg hover:bg-amber-700 transition-colors"
               >
-                Ver Lotes
+                Ver Lista
               </button>
             </PermissionGuard>
+            <PermissionGuard permissions="lots:view">
+              <button
+                onClick={() => navigate(`/projects/${project.id}/lotsMap`)}
+                className=" px-4 py-2 bg-amber-600 text-white rounded-lg hover:bg-amber-700 transition-colors"
+              >
+                Ver Mapa
+              </button>
+            </PermissionGuard>
+            </div>
+            
           </div>
           <p className="text-gray-600">
             Gestiona los lotes asociados a este proyecto
