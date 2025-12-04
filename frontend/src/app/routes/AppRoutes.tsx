@@ -23,6 +23,7 @@ import CompaniesListPage from '@features/companies/pages/CompaniesListPage'
 import CompanyFormPage from '@features/companies/pages/CompanyFormPage'
 import UsersListPage from '@features/users/pages/UsersListPage'
 import UserFormPage from '@features/users/pages/UserFormPage'
+import LotMapPage from '@features/lots/pages/LotMapPage'
 
 const AppRoutes: React.FC = () => {
   const token = useAppSelector((s: RootState) => s.auth.token)
@@ -103,6 +104,17 @@ const AppRoutes: React.FC = () => {
           <PrivateRoute>
             <RoleBasedRoute permissions="lots:create">
               <LotFormPage />
+            </RoleBasedRoute>
+          </PrivateRoute>
+        }
+      />
+
+      <Route
+        path="/projects/:proyectoId/lotsMap"
+        element={
+          <PrivateRoute>
+            <RoleBasedRoute permissions="lots:view">
+              <LotMapPage />
             </RoleBasedRoute>
           </PrivateRoute>
         }
