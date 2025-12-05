@@ -24,6 +24,7 @@ import CompanyFormPage from '@features/companies/pages/CompanyFormPage'
 import UsersListPage from '@features/users/pages/UsersListPage'
 import UserFormPage from '@features/users/pages/UserFormPage'
 import LotMapPage from '@features/lots/pages/LotMapPage'
+import ReportsPage from '../../features/reports/pages/ReportsPage';
 
 const AppRoutes: React.FC = () => {
   const token = useAppSelector((s: RootState) => s.auth.token)
@@ -272,7 +273,7 @@ const AppRoutes: React.FC = () => {
         element={
           <PrivateRoute>
             <RoleBasedRoute permissions={['reports:view-own', 'reports:view-tenant', 'reports:view-global']}>
-              <div>Reportes - En construcción</div>
+              <ReportsPage/>
             </RoleBasedRoute>
           </PrivateRoute>
         }

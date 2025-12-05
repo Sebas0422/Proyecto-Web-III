@@ -3,7 +3,7 @@ import { useParams } from 'react-router-dom';
 import { DashboardLayout } from '@shared/components';
 import { useGetLotsQuery } from '@features/lots/services/lotsApi';
 import MapCreateLot from '../components/MapCreateLot';
-import { Spinner, Alert, Button } from 'react-bootstrap';
+import { Spinner, Alert } from 'react-bootstrap';
 
 
 
