@@ -1,32 +1,54 @@
 export interface FinancialReport {
-    totalVentas: number
-    totalReservas: number
-    totalComisiones: number
-    proyectos: Array<{
-        proyectoId: string
-        nombre: string
-        ventas: number
-        reservas: number
-        ingresos: number
-    }>
+    period: string;
+    startDate: string;
+    endDate: string;
+    totalIncome: number;
+    totalExpenses: number;
+    netProfit: number;
+    profitMargin: number;
+    pendingPayments: number;
+    confirmedPayments: number;
+    currency: string;
+    incomeBySource: Array<{
+        source: string;
+        amount: number;
+        currency: string;
+    }>;
+    monthlyData: Array<{
+        month: string;
+        income: number;
+        expenses: number;
+        profit: number;
+        currency: string;
+    }>;
 }
 
 export interface LeadsReport {
-    totalLeads: number
-    leadsPorCanal: Array<{
-        canal: string
-        cantidad: number
-    }>
-    leadsPorProyecto: Array<{
-        proyectoId: string
-        nombreProyecto: string
-        cantidad: number
-    }>
+    period: string;
+    startDate: string;
+    endDate: string;
+    totalLeads: number;
+    activeLeads: number;
+    convertedLeads: number;
+    lostLeads: number;
+    conversionRate: number;
+    averageConversionTime: number;
+    leadsBySource: Array<{
+        source: string;
+        count: number;
+        converted: number;
+        conversionRate: number;
+    }>;
+    leadsByStatus: Array<{
+        status: string;
+        count: number;
+        percentage: number;
+    }>;
 }
 
 export interface ReportsFilters {
-    startDate: string 
-    endDate: string   
+    startDate: string
+    endDate: string
 }
 
 export interface ApiResponse<T> {

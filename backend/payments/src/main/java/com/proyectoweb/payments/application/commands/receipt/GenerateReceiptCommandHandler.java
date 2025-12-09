@@ -26,7 +26,6 @@ public class GenerateReceiptCommandHandler implements Command.Handler<GenerateRe
 
     @Override
     public ReceiptDto handle(GenerateReceiptCommand command) {
-        // Verify payment exists and is completed
         Payment payment = paymentRepository.findById(command.paymentId())
                 .orElseThrow(() -> new IllegalArgumentException("Payment not found: " + command.paymentId()));
 
@@ -38,15 +37,12 @@ public class GenerateReceiptCommandHandler implements Command.Handler<GenerateRe
             throw new IllegalStateException("Cannot generate receipt for non-completed payment");
         }
 
-        // Check if receipt already exists
         if (receiptRepository.findByPaymentId(command.paymentId()).isPresent()) {
             throw new IllegalStateException("Receipt already exists for payment: " + command.paymentId());
         }
 
-        // Generate receipt number
         String receiptNumber = generateReceiptNumber(command.tenantId());
 
-        // Create receipt aggregate
         Receipt receipt = Receipt.generate(
                 command.tenantId(),
                 command.paymentId(),
@@ -59,15 +55,12 @@ public class GenerateReceiptCommandHandler implements Command.Handler<GenerateRe
                 "Receipt for payment: " + payment.getId()
         );
 
-        // Save receipt
         Receipt saved = receiptRepository.save(receipt);
 
-        // Return DTO
         return mapToDto(saved);
     }
 
     private String generateReceiptNumber(UUID tenantId) {
-        // Format: RCP-{TENANT_PREFIX}-{YYYYMMDD}-{SEQUENCE}
         String tenantPrefix = tenantId.toString().substring(0, 8).toUpperCase();
         String datePart = LocalDateTime.now().format(DateTimeFormatter.ofPattern("yyyyMMdd"));
         String sequence = String.format("%04d", (int) (Math.random() * 10000));

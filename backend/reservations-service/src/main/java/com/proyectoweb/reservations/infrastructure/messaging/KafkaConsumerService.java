@@ -3,6 +3,7 @@ package com.proyectoweb.reservations.infrastructure.messaging;
 import com.proyectoweb.reservations.infrastructure.messaging.events.PaymentCompletedEvent;
 import com.proyectoweb.reservations.domain.aggregates.Reservation;
 import com.proyectoweb.reservations.domain.repositories.ReservationRepository;
+import com.proyectoweb.reservations.infrastructure.messaging.events.ReservationConfirmedEvent;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.kafka.annotation.KafkaListener;
@@ -24,12 +25,11 @@ public class KafkaConsumerService {
         this.kafkaProducerService = kafkaProducerService;
     }
 
-    @KafkaListener(topics = "payment-events", groupId = "reservations-service-group")
+    @KafkaListener(topics = "payment-completed-events", groupId = "reservations-service-group")
     public void consumePaymentEvents(PaymentCompletedEvent event) {
         logger.info("Recibido PaymentCompletedEvent para reservationId: {}", event.getReservationId());
 
         try {
-            // El reservationId ahora es un String (UUID)
             UUID reservationId = UUID.fromString(event.getReservationId());
             Reservation reservation = reservationRepository.findById(reservationId)
                     .orElseThrow(() -> new IllegalArgumentException("Reservation not found: " + reservationId));
@@ -40,10 +40,10 @@ public class KafkaConsumerService {
             logger.info("Reservación {} confirmada automáticamente por pago {}", 
                        reservationId, event.getPaymentId());
 
-            com.proyectoweb.reservations.infrastructure.messaging.events.ReservationConfirmedEvent confirmedEvent = 
-                new com.proyectoweb.reservations.infrastructure.messaging.events.ReservationConfirmedEvent(
+            ReservationConfirmedEvent confirmedEvent =
+                new ReservationConfirmedEvent(
                     reservation.getId().toString(),
-                    null, // leadId
+                    null,
                     reservation.getLotId().toString(),
                     reservation.getProjectId().toString(),
                     reservation.getTenantId().toString(),

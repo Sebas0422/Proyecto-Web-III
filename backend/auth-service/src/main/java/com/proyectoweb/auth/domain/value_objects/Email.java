@@ -1,5 +1,6 @@
 package com.proyectoweb.auth.domain.value_objects;
 
+import com.proyectoweb.auth.shared_kernel.core.BusinessRule;
 import com.proyectoweb.auth.shared_kernel.core.ValueObject;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
@@ -19,7 +20,7 @@ public class Email extends ValueObject {
         return value;
     }
 
-    private static class EmailValidationRule implements com.proyectoweb.auth.shared_kernel.core.BusinessRule {
+    private static class EmailValidationRule implements BusinessRule {
         private final String email;
         private static final String EMAIL_REGEX = "^[A-Za-z0-9+_.-]+@[A-Za-z0-9.-]+\\.[A-Za-z]{2,}$";
 

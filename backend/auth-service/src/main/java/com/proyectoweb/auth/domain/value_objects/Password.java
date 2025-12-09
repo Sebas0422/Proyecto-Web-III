@@ -1,5 +1,7 @@
 package com.proyectoweb.auth.domain.value_objects;
 
+import com.proyectoweb.auth.shared_kernel.core.BusinessRule;
+import com.proyectoweb.auth.shared_kernel.core.BusinessRuleValidationException;
 import com.proyectoweb.auth.shared_kernel.core.ValueObject;
 import lombok.Getter;
 
@@ -25,7 +27,7 @@ public class Password extends ValueObject {
         return new Password(hashedPassword);
     }
 
-    private static class PasswordValidationRule implements com.proyectoweb.auth.shared_kernel.core.BusinessRule {
+    private static class PasswordValidationRule implements BusinessRule {
         private final String password;
         private static final int MIN_LENGTH = 6;
 
@@ -45,7 +47,7 @@ public class Password extends ValueObject {
 
         public void validate() {
             if (!isValid()) {
-                throw new com.proyectoweb.auth.shared_kernel.core.BusinessRuleValidationException(this);
+                throw new BusinessRuleValidationException(this);
             }
         }
     }

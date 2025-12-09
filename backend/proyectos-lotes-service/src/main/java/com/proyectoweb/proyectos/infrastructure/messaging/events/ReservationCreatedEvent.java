@@ -1,4 +1,4 @@
-package com.proyectoweb.reservations.infrastructure.messaging.events;
+package com.proyectoweb.proyectos.infrastructure.messaging.events;
 
 import java.math.BigDecimal;
 import java.time.LocalDate;

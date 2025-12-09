@@ -27,6 +27,35 @@ public class Lote extends AggregateRoot {
         super(id);
     }
 
+    public static Lote reconstituir(
+            UUID id,
+            UUID proyectoId,
+            String numeroLote,
+            String manzana,
+            LoteGeometria geometria,
+            Double areaCalculada,
+            Point centroide,
+            Precio precio,
+            EstadoLote estado,
+            String observaciones,
+            LocalDateTime createdAt,
+            LocalDateTime updatedAt
+    ) {
+        Lote lote = new Lote(id);
+        lote.proyectoId = proyectoId;
+        lote.numeroLote = numeroLote;
+        lote.manzana = manzana;
+        lote.geometria = geometria;
+        lote.areaCalculada = areaCalculada;
+        lote.centroide = centroide;
+        lote.precio = precio;
+        lote.estado = estado;
+        lote.observaciones = observaciones;
+        lote.createdAt = createdAt;
+        lote.updatedAt = updatedAt;
+        return lote;
+    }
+
     public static Lote crear(
             UUID id,
             UUID proyectoId,

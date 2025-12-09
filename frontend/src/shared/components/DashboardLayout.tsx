@@ -11,7 +11,7 @@ import {
   X,
   Home,
   Building,
-  UserCog,
+  UserCog
 } from 'lucide-react'
 import { useNavigate } from 'react-router-dom'
 import { useAppDispatch, useAppSelector } from '@app/store/hooks'
@@ -19,6 +19,7 @@ import { logout } from '@features/auth/model/authSlice'
 import SidebarItem from './SidebarItem'
 import type { RootState } from '@app/store/store'
 import { usePermissions } from '@shared/hooks'
+import { PERMISSIONS } from '@shared/constants/permissions'
 
 interface DashboardLayoutProps {
   children: ReactNode
@@ -48,38 +49,38 @@ const DashboardLayout: React.FC<DashboardLayoutProps> = ({ children }) => {
         icon: <Building size={20} />,
         label: 'Empresas',
         path: '/companies',
-        show: hasPermission('companies:view')
+        show: hasPermission(PERMISSIONS.COMPANIES_VIEW)
       },
       {
         icon: <UserCog size={20} />,
         label: 'Usuarios',
         path: '/users',
-        show: hasPermission('users:view')
+        show: hasPermission(PERMISSIONS.USERS_VIEW)
       },
       {
         icon: <Building2 size={20} />,
         label: 'Proyectos',
         path: '/projects',
-        show: hasPermission('projects:view')
+        show: hasPermission(PERMISSIONS.PROJECTS_VIEW)
       },
       {
         icon: <Users size={20} />,
         label: 'Leads',
         path: '/leads',
-        show: hasPermission('leads:view')
+        show: hasPermission(PERMISSIONS.LEADS_VIEW)
       },
       {
         icon: <BookmarkCheck size={20} />,
         label: 'Reservas',
         path: '/reservations',
-        show: hasPermission('reservations:view')
+        show: hasPermission(PERMISSIONS.RESERVATIONS_VIEW)
       },
       {
         icon: <BarChart3 size={20} />,
         label: 'Reportes',
         path: '/reports',
-        show: hasPermission('reports:view-own') || hasPermission('reports:view-tenant') || hasPermission('reports:view-global')
-      },
+        show: hasPermission(PERMISSIONS.REPORTS_VIEW_OWN)
+      }
     ]
 
     return allItems.filter(item => item.show)

@@ -27,14 +27,19 @@ public class LoteMapper {
     }
 
     public Lote toDomain(LoteJpaModel jpa) {
-        return Lote.crear(
+        return Lote.reconstituir(
                 jpa.getId(),
                 jpa.getProyectoId(),
                 jpa.getNumeroLote(),
                 jpa.getManzana(),
                 new LoteGeometria(jpa.getGeometria()),
+                jpa.getAreaCalculada(),
+                jpa.getCentroide(),
                 new Precio(jpa.getPrecio()),
-                jpa.getObservaciones()
+                jpa.getEstado(),
+                jpa.getObservaciones(),
+                jpa.getCreatedAt(),
+                jpa.getUpdatedAt()
         );
     }
 }

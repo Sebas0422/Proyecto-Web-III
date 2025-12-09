@@ -1,6 +1,5 @@
 package com.proyectoweb.proyectos.domain.value_objects;
 
-import com.proyectoweb.proyectos.shared_kernel.ValueObject;
 import org.locationtech.jts.geom.Coordinate;
 import org.locationtech.jts.geom.GeometryFactory;
 import org.locationtech.jts.geom.Point;

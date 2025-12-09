@@ -18,24 +18,21 @@ public class FileStorageService {
     private String uploadDir;
 
     public String storeFile(MultipartFile file, UUID loteId) throws IOException {
-        // Crear directorio si no existe
+
         Path uploadPath = Paths.get(uploadDir, loteId.toString());
         if (!Files.exists(uploadPath)) {
             Files.createDirectories(uploadPath);
         }
 
-        // Generar nombre único para el archivo
         String originalFileName = file.getOriginalFilename();
         String fileExtension = originalFileName != null && originalFileName.contains(".")
                 ? originalFileName.substring(originalFileName.lastIndexOf("."))
                 : "";
         String uniqueFileName = UUID.randomUUID().toString() + fileExtension;
 
-        // Guardar archivo
         Path filePath = uploadPath.resolve(uniqueFileName);
         Files.copy(file.getInputStream(), filePath, StandardCopyOption.REPLACE_EXISTING);
 
-        // Retornar ruta relativa
         return loteId.toString() + "/" + uniqueFileName;
     }
 

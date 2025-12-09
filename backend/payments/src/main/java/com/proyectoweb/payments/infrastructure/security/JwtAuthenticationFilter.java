@@ -52,11 +52,11 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
 
                 SimpleGrantedAuthority authority = new SimpleGrantedAuthority(role);
                 UsernamePasswordAuthenticationToken authentication =
-                        new UsernamePasswordAuthenticationToken(
-                                UUID.fromString(userId),
-                                null,
-                                Collections.singletonList(authority)
-                        );
+                    new UsernamePasswordAuthenticationToken(
+                        UUID.fromString(userId),
+                        token, // Guardar el JWT como credentials
+                        Collections.singletonList(authority)
+                    );
 
                 authentication.setDetails(tenantId);
                 SecurityContextHolder.getContext().setAuthentication(authentication);

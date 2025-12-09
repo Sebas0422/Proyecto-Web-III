@@ -6,7 +6,10 @@ import com.proyectoweb.payments.domain.aggregates.Payment;
 import com.proyectoweb.payments.domain.repositories.PaymentRepository;
 import com.proyectoweb.payments.infrastructure.messaging.KafkaProducerService;
 import com.proyectoweb.payments.infrastructure.messaging.events.PaymentCompletedEvent;
+import org.springframework.security.core.context.SecurityContext;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Component;
+import com.proyectoweb.payments.infrastructure.external.ReservationClient;
 
 import java.time.LocalDateTime;
 
@@ -15,11 +18,15 @@ public class ConfirmPaymentCommandHandler implements Command.Handler<ConfirmPaym
 
     private final PaymentRepository paymentRepository;
     private final KafkaProducerService kafkaProducerService;
+    private final ReservationClient reservationClient;
+
 
     public ConfirmPaymentCommandHandler(PaymentRepository paymentRepository,
-                                        KafkaProducerService kafkaProducerService) {
+                                        KafkaProducerService kafkaProducerService,
+                                        ReservationClient reservationClient) {
         this.paymentRepository = paymentRepository;
         this.kafkaProducerService = kafkaProducerService;
+        this.reservationClient = reservationClient;
     }
 
     @Override
@@ -36,11 +43,24 @@ public class ConfirmPaymentCommandHandler implements Command.Handler<ConfirmPaym
 
             Payment saved = paymentRepository.save(payment);
 
+            String lotIdStr = null;
+
+            try {
+                String token = extractTokenFromContext();
+                var reservation = reservationClient.getReservationById(saved.getReservationId(), token);
+                if (reservation != null && reservation.lotId != null) {
+                    lotIdStr = reservation.lotId;
+                }
+                System.out.println("lote id obtenidoooo: "+ lotIdStr);
+            } catch (Exception ex) {
+                System.err.println("No se pudo obtener lotId desde reservations-service: " + ex.getMessage());
+            }
+
             // Publicar evento de pago completado a Kafka
             PaymentCompletedEvent kafkaEvent = new PaymentCompletedEvent(
                 saved.getId().toString(),
                 saved.getReservationId().toString(),
-                null, // lotId - agregar si está disponible
+                lotIdStr,
                 saved.getTenantId().toString(),
                 saved.getAmount().amount(),
                 saved.getPaymentMethod().name(),
@@ -48,13 +68,12 @@ public class ConfirmPaymentCommandHandler implements Command.Handler<ConfirmPaym
                 saved.getStatus().name(),
                 LocalDateTime.now()
             );
-            
+
             try {
                 kafkaProducerService.publishPaymentCompleted(kafkaEvent);
             } catch (Exception e) {
                 System.err.println("Error publishing to Kafka: " + e.getMessage());
                 e.printStackTrace();
-                // No lanzar la excepción, el pago ya está confirmado
             }
 
             return new PaymentDto(
@@ -86,5 +105,14 @@ public class ConfirmPaymentCommandHandler implements Command.Handler<ConfirmPaym
             throw new RuntimeException("Error confirming payment: " + e.getMessage(), e);
         }
     }
+
+    private String extractTokenFromContext() {
+        SecurityContext context = SecurityContextHolder.getContext();
+        if (context != null && context.getAuthentication() != null && context.getAuthentication().getCredentials() instanceof String) {
+            return (String) context.getAuthentication().getCredentials();
+        }
+        throw new RuntimeException("No se pudo extraer el token JWT del contexto de seguridad");
+    }
 }
+
 

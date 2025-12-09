@@ -22,7 +22,6 @@ public class CreatePaymentCommandHandler implements Command.Handler<CreatePaymen
 
     @Override
     public PaymentDto handle(CreatePaymentCommand command) {
-        // Create value objects
         CustomerInfo customerInfo = new CustomerInfo(
                 command.customerName(),
                 command.customerEmail(),
@@ -32,7 +31,6 @@ public class CreatePaymentCommandHandler implements Command.Handler<CreatePaymen
 
         Money amount = new Money(command.amount(), command.currency());
 
-        // Create payment aggregate
         Payment payment = Payment.create(
                 command.tenantId(),
                 command.reservationId(),
@@ -44,19 +42,15 @@ public class CreatePaymentCommandHandler implements Command.Handler<CreatePaymen
                 command.notes()
         );
 
-        // Generate QR code for payment
         String qrData = generateQRData(payment);
         payment.assignQRCode(qrData);
 
-        // Save payment
         Payment saved = paymentRepository.save(payment);
 
-        // Return DTO
         return mapToDto(saved);
     }
 
     private String generateQRData(Payment payment) {
-        // Format: PAYMENT|{paymentId}|{amount}|{currency}|{customerName}
         return String.format("PAYMENT|%s|%.2f|%s|%s",
                 payment.getId(),
                 payment.getAmount().amount(),

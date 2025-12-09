@@ -49,11 +49,13 @@ public class CreateReservationCommandHandler implements Command.Handler<CreateRe
         Reservation saved = reservationRepository.save(reservation);
 
         ReservationCreatedEvent kafkaEvent = new ReservationCreatedEvent(
-            Math.abs(saved.getId().hashCode() * 1L),
+            saved.getId().toString(),
             null,
-            Math.abs(saved.getLotId().hashCode() * 1L),
-            Math.abs(saved.getProjectId().hashCode() * 1L),
+            null, // lotId como String (legacy)
+            null, // projectId como String (legacy)
             saved.getTenantId().toString(),
+            saved.getLotId().toString(), // lotUuid
+            saved.getProjectId().toString(), // projectUuid
             saved.getReservationAmount().amount(),
             saved.getReservationDate().toLocalDate(),
             saved.getExpirationDate().toLocalDate(),

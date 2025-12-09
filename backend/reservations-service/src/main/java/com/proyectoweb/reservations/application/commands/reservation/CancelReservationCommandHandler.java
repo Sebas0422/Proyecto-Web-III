@@ -4,15 +4,22 @@ import an.awesome.pipelinr.Command;
 import com.proyectoweb.reservations.application.dto.ReservationDto;
 import com.proyectoweb.reservations.domain.aggregates.Reservation;
 import com.proyectoweb.reservations.domain.repositories.ReservationRepository;
+import com.proyectoweb.reservations.infrastructure.messaging.KafkaProducerService;
+import com.proyectoweb.reservations.infrastructure.messaging.events.ReservationCancelledEvent;
 import org.springframework.stereotype.Component;
+
+import java.time.LocalDateTime;
 
 @Component
 public class CancelReservationCommandHandler implements Command.Handler<CancelReservationCommand, ReservationDto> {
     
     private final ReservationRepository reservationRepository;
+    private final KafkaProducerService kafkaProducerService;
 
-    public CancelReservationCommandHandler(ReservationRepository reservationRepository) {
+    public CancelReservationCommandHandler(ReservationRepository reservationRepository,
+                                          KafkaProducerService kafkaProducerService) {
         this.reservationRepository = reservationRepository;
+        this.kafkaProducerService = kafkaProducerService;
     }
 
     @Override
@@ -26,6 +33,16 @@ public class CancelReservationCommandHandler implements Command.Handler<CancelRe
 
         reservation.cancel();
         Reservation saved = reservationRepository.save(reservation);
+
+        // Publicar evento de cancelación
+        ReservationCancelledEvent event = new ReservationCancelledEvent(
+            saved.getId().toString(),
+            saved.getLotId().toString(),
+            saved.getProjectId().toString(),
+            saved.getTenantId().toString(),
+            LocalDateTime.now()
+        );
+        kafkaProducerService.publishReservationCancelled(event);
 
         return new ReservationDto(
                 saved.getId(),

@@ -8,8 +8,8 @@ import org.springframework.stereotype.Service;
 @Service
 public class KafkaProducerService {
 
-    private static final String PAYMENT_EVENTS_TOPIC = "payment-events";
-    private static final String RECEIPT_EVENTS_TOPIC = "receipt-events";
+    private static final String PAYMENT_COMPLETED_TOPIC = "payment-completed-events";
+    private static final String RECEIPT_GENERATED_TOPIC = "receipt-generated-events";
 
     private final KafkaTemplate<String, Object> kafkaTemplate;
 
@@ -18,10 +18,10 @@ public class KafkaProducerService {
     }
 
     public void publishPaymentCompleted(PaymentCompletedEvent event) {
-        kafkaTemplate.send(PAYMENT_EVENTS_TOPIC, event.getTenantId().toString(), event);
+        kafkaTemplate.send(PAYMENT_COMPLETED_TOPIC, event.getTenantId().toString(), event);
     }
 
     public void publishReceiptGenerated(ReceiptGeneratedEvent event) {
-        kafkaTemplate.send(RECEIPT_EVENTS_TOPIC, event.getTenantId().toString(), event);
+        kafkaTemplate.send(RECEIPT_GENERATED_TOPIC, event.getTenantId().toString(), event);
     }
 }
