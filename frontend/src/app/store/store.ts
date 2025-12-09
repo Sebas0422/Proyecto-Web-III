@@ -9,6 +9,8 @@ import { projectsApi } from '../../features/projects/services/projectsApi'
 import { paymentsApi } from '../../features/payments/services/paymentsApi'
 import { companiesApi } from '../../features/companies/services/companiesApi'
 import { usersApi } from '../../features/users/services/usersApi'
+import { reportsApi } from '../../features/reports/services/reportsApi'
+
 import authReducer from '../../features/auth/model/authSlice'
 import { setupListeners } from '@reduxjs/toolkit/query'
 
@@ -25,6 +27,7 @@ export const store = configureStore({
     [paymentsApi.reducerPath]: paymentsApi.reducer,
     [companiesApi.reducerPath]: companiesApi.reducer,
     [usersApi.reducerPath]: usersApi.reducer,
+    [reportsApi.reducerPath]: reportsApi.reducer, 
   },
   middleware: (getDefaultMiddleware) =>
     getDefaultMiddleware().concat(
@@ -37,7 +40,8 @@ export const store = configureStore({
       projectsApi.middleware,
       paymentsApi.middleware,
       companiesApi.middleware,
-      usersApi.middleware
+      usersApi.middleware,
+      reportsApi.middleware
     ),
   devTools: true,
 })
